@@ -1,0 +1,6 @@
+interface:
+  display_name: "Context Bridge · 上下文迁移"
+  short_description: "判断长任务迁移时机，校验交接材料，并按需加载上下文继续工作"
+  default_prompt: "使用 $context-bridge 评估当前任务的上下文压力，必要时准备可校验的迁移包，并给出渐进式恢复入口。"
+policy:
+  allow_implicit_invocation: true

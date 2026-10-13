@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "backend": "installed Basic Memory through real stdio proxy",
+  "enhanced_models": true,
+  "embedding": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "reranker": "BAAI/bge-reranker-base",
+  "native_search_attempts": 1,
+  "contracts": [
+    "native write/read preserves numeric fact",
+    "request IDs",
+    "recall project isolation",
+    "cached page with zero quota",
+    "reflection budget rejection",
+    "invalid input rejection and recovery",
+    "other-project native title search"
+  ],
+  "scope": "隔离安装布局的真实 stdio 业务链路，包含多语嵌入与重排；后续正式安装与语言模型结果见真实模型与安装验收.json"
+}

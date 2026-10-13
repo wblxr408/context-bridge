@@ -1,0 +1,90 @@
+{
+  "scope": "现场6题指定来源检索，不含答案质量或Hindsight基准",
+  "hits": 5,
+  "cases": [
+    {
+      "query": "为什么我们不另建一个持续学习后台，而是继续使用现有的监听器？",
+      "split": "diagnostic",
+      "designated_source": "main/codex/codex-checkpoint-2026-10-12-t06-14-16-z-ecc-双客户端融合完成",
+      "designated_source_rank": null,
+      "seconds": 23.688,
+      "returned_sources": [
+        "main/codex/decisions/codex-重叠技能按领域融合并渐进式加载",
+        "main/codex/codex-checkpoint-2026-10-12-t05-59-30-z-ecc-整体融合待安装与强制-tdd",
+        "main/codex/codex-checkpoint-2026-10-08-t08-47-40-z-图文笔记已发布并准备小节随笔栏",
+        "main/codex/codex-checkpoint-2026-10-08-t07-36-27-z-计网新课件续篇接入前的核对",
+        "main/decisions/course-library/三门课学习站采用单文件离线书架并支持持续追加章节"
+      ]
+    },
+    {
+      "query": "我之前决定怎么清理检查点，哪些历史必须保留？",
+      "split": "diagnostic",
+      "designated_source": "main/10-decisions/context-bridge-检查点采用保留保护与两阶段回收",
+      "designated_source_rank": 1,
+      "seconds": 13.187,
+      "returned_sources": [
+        "main/10-decisions/context-bridge-检查点采用保留保护与两阶段回收",
+        "main/codex/decisions/srtp-最终上游必须保留论文的-yolo-ocr-vlm-完整语义流程",
+        "main/engineering/security/a2abreak/solutions/a2-ab-11-中断任务租约与有界资源回收",
+        "main/codex/water-guard/codex-checkpoint-2026-10-04-t22-45-34-z-water-guard-single-react-frontend-completed",
+        "main/engineering/network-topology/srtp-本地完整系统-v2-通过作用范围解析达到-93.71"
+      ]
+    },
+    {
+      "query": "现在的开发流程允许启动一下程序或者检查文件存在就作为验收吗？",
+      "split": "diagnostic",
+      "designated_source": "main/codex/codex-checkpoint-2026-10-12-t06-14-16-z-ecc-双客户端融合完成",
+      "designated_source_rank": 2,
+      "seconds": 20.25,
+      "returned_sources": [
+        "main/codex/codex-checkpoint-2026-10-12-t05-59-30-z-ecc-整体融合待安装与强制-tdd",
+        "main/codex/codex-checkpoint-2026-10-12-t06-14-16-z-ecc-双客户端融合完成",
+        "main/projects/silver-economy-agent/银发生活-agent-选题要求与联系确认能力边界",
+        "main/codex/decisions/codex-重叠技能按领域融合并渐进式加载",
+        "main/decisions/silver-economy-agent/银发-agent-可提交原型-1.0-范围冻结"
+      ]
+    },
+    {
+      "query": "银发项目现在还可以向用户提供演示体验和虚构记录吗？",
+      "split": "held_out",
+      "designated_source": "main/decisions/silver-economy-agent/银发前端只使用真实账号与业务数据",
+      "designated_source_rank": 1,
+      "seconds": 22.61,
+      "returned_sources": [
+        "main/decisions/silver-economy-agent/银发前端只使用真实账号与业务数据",
+        "main/codex/silver-life-agent/codex-checkpoint-2026-10-06-t11-58-00-z-hexu-realistic-demo-accounts-and-video-capture",
+        "main/decisions/silver-economy-agent/银发-agent-以目标和真实进度为首页",
+        "main/codex/silver-life-agent/codex-checkpoint-2026-10-06-t13-32-47-z-hexu-edited-demo-film-delivered",
+        "main/codex/silver-life-agent/codex-checkpoint-2026-10-08-t02-43-40-z-hexu-synchronized-film-and-capture-project"
+      ]
+    },
+    {
+      "query": "课程学习资料应该做成什么文件，后续章节如何追加？",
+      "split": "held_out",
+      "designated_source": "main/decisions/course-library/三门课学习站采用单文件离线书架并支持持续追加章节",
+      "designated_source_rank": 1,
+      "seconds": 22.344,
+      "returned_sources": [
+        "main/decisions/course-library/三门课学习站采用单文件离线书架并支持持续追加章节",
+        "main/codex/codex-checkpoint-2026-10-08-t07-36-27-z-计网新课件续篇接入前的核对",
+        "main/codex/codex-checkpoint-2026-10-08-t08-47-40-z-图文笔记已发布并准备小节随笔栏",
+        "main/codex/dong-yongqiang-s-srtp-new-network-topology-distribution/codex-checkpoint-2026-10-06-t03-29-45-z-secon-writing-reference-archive-delivered",
+        "main/codex/decisions/srtp-论文采用-config-scope-标题并同步-word-和-la-te-x"
+      ]
+    },
+    {
+      "query": "论文页数超标时，能否缩小字体和页边距满足篇幅？",
+      "split": "held_out",
+      "designated_source": "main/notes/configscope/config-scope-九页预算与-secon-已发表-method-篇幅核验",
+      "designated_source_rank": 3,
+      "seconds": 20.39,
+      "returned_sources": [
+        "main/codex/dong-yongqiang-s-srtp-new-network-topology-distribution/codex-checkpoint-2026-10-06-t09-36-08-z-config-scope-introductions-clarified-and-synchronized",
+        "main/codex/dong-yongqiang-s-srtp-new-network-topology-distribution/codex-checkpoint-2026-10-06-t09-57-49-z-config-scope-unified-running-example-and-compiled-paper",
+        "main/notes/configscope/config-scope-九页预算与-secon-已发表-method-篇幅核验",
+        "main/codex/decisions/srtp-论文采用-config-scope-标题并同步-word-和-la-te-x",
+        "main/engineering/decisions/network-topology/config-scope-实验正文采用贡献主线与紧凑图表"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-13",
+  "status": "deployed_and_mcp_hook_accepted",
+  "regression": {
+    "tests": 87,
+    "seconds": 87.04,
+    "status": "passed"
+  },
+  "installed_lifecycle": {
+    "batch": "854426a9eb254c8280e342c6914d5f18",
+    "started": "2026-10-13T01:55:17.766407+00:00",
+    "scope": "installed Codex/Claude MCP routes, real main fixture and original scheduled listener",
+    "production_fast_minutes": 60,
+    "clients": {
+      "Codex": {
+        "status": "passed",
+        "contracts": [
+          "quarantine exact read",
+          "current/history isolation",
+          "native index retirement",
+          "automatic activity filtering",
+          "restore returns original source",
+          "real scheduled expiry",
+          "exact expired cursor tombstone",
+          "latest recovery source retained",
+          "summary readable after deletion"
+        ]
+      },
+      "Claude": {
+        "status": "passed",
+        "contracts": [
+          "quarantine exact read",
+          "current/history isolation",
+          "native index retirement",
+          "automatic activity filtering",
+          "restore returns original source",
+          "real scheduled expiry",
+          "exact expired cursor tombstone",
+          "latest recovery source retained",
+          "summary readable after deletion"
+        ]
+      }
+    },
+    "operations": [
+      {
+        "state": "quarantined",
+        "count": 4,
+        "actual_fast_minutes": 1
+      },
+      {
+        "state": "scheduled_purge",
+        "count": 3,
+        "real_clock": true,
+        "deadline_utc": "2026-10-13T01:56:54.858120+00:00"
+      },
+      {
+        "state": "restored_and_pinned",
+        "count": 1
+      }
+    ],
+    "status": "passed",
+    "fixture_cleanup": {
+      "exact_native_deletions": 3,
+      "results": [
+        {
+          "deleted": true,
+          "title": "Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 0",
+          "permalink": "main/engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/checkpoint-deployed-acceptance-854426a9eb254c8280e342c6914d5f18-0",
+          "file_path": "engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 0.md"
+        },
+        {
+          "deleted": true,
+          "title": "Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 4",
+          "permalink": "main/engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/checkpoint-deployed-acceptance-854426a9eb254c8280e342c6914d5f18-4",
+          "file_path": "engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 4.md"
+        },
+        {
+          "deleted": true,
+          "title": "Checkpoint history e8609f92470f",
+          "permalink": "main/engineering/checkpoint-history/e8609f92470f512f9184443c8eda25dd",
+          "file_path": "engineering/checkpoint-history/e8609f92470f512f9184443c8eda25dd.md"
+        }
+      ]
+    },
+    "finished": "2026-10-13T02:04:48.886276+00:00"
+  },
+  "installed_hooks": {
+    "Codex": {
+      "status": "passed",
+      "deadline_seconds": 30,
+      "replay_suppressed": true
+    },
+    "Claude": {
+      "status": "passed",
+      "deadline_seconds": 30,
+      "replay_suppressed": true
+    }
+  },
+  "production_policy": {
+    "ordinary_source_hours": 24,
+    "ordinary_quarantine_hours": 72,
+    "fast_quarantine_minutes": 60,
+    "reconcile_seconds": 300,
+    "startup_due_maintenance": true
+  },
+  "budget_preserved": {
+    "max_calls_per_hour": 2,
+    "max_calls_per_day": 8,
+    "max_tokens_per_day": 60000,
+    "reserve_tokens_per_call": 12000
+  },
+  "queue_snapshot": {
+    "filtered": 1151,
+    "queued": 4845,
+    "retry": 1,
+    "saved": 9,
+    "skipped": 13
+  },
+  "queue_trimmed": false,
+  "previous_time_batch": {
+    "deleted": 155,
+    "retained": 39,
+    "summaries": 42,
+    "retained_verified_again": true
+  },
+  "owned_fixture_notes_remaining": 0,
+  "owned_fixture_lifecycle_records_remaining": 0,
+  "final_code_backup": "C:\\Users\\wblxr\\Documents\\Codex\\2026-10-12\\dui\\work\\memory-upgrade\\checkpoint-deploy-backup-20261013T020405Z",
+  "claude_native_model": {
+    "status": "blocked_external_gateway",
+    "api_status": 503,
+    "reason": "all nodes exhausted",
+    "bounded_retry": "2026-10-13; no inference/tool turns completed"
+  },
+  "client_connection_scope": "New processes using both actual installed MCP routes; already-open chats may reconnect basic-memory."
+}

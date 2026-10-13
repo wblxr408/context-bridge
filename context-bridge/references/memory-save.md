@@ -1,0 +1,5 @@
+# memory save
+
+Save an immutable note in Basic Memory main, honoring existing user/project configuration and capture folder. Use bm-writing. Capture the original objective, latest corrections, current artifacts, verified checks, fragile runtime state, unresolved work, and one next action; the note points to authoritative artifacts instead of copying a whole plan/diff.
+
+Follow the memory-save module's Gather/Write/Link/Confirm sections selectively. Preserve exact supplied agent/session metadata; link earlier same-chat checkpoints only after exact identity verification. Use the UTC timestamped identity, overwrite=False, and accept only action=created; collisions get a suffix. Never mutate earlier snapshots. Use coding_session only with proven required repository/branch/SHA fields; otherwise general codex_session is appropriate. Verify the returned note and retain the exact permalink/file/title cursor. Present `$context-bridge resume <returned cursor>` as the unified resume command; the legacy bm-orient command is accepted as compatibility intent.

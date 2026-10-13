@@ -1,0 +1,14 @@
+# Fusion execution contract
+
+This is the controlling workflow for the merged skill and its modules. Original specialist guidance supplies domain capabilities, schemas, scripts, and evidence standards. It does not reinstate conflicting process mandates.
+
+- Use the user's current request, existing authorization, and project instructions to settle scope. Infer routine choices from supplied context; ask only for a material unresolved choice or an actually unauthorized action.
+- Plan to finish correctly in one substantive pass: identify the relevant inputs, dependencies, invariants, and acceptance evidence before changing the result. Keep small tasks small.
+- Select only the requested module and the resources needed now. Do not read entire libraries, dispatch every role, compile every format, or audit unrelated systems merely because they are available.
+- Perform meaningful checks of the changed behavior and the repository's required checks. Fix failures caused by the task and recheck the affected path. Expand checking only for new evidence, changes, or unresolved risk. No universal coverage percentage, invented score gate, fixed interview, mandatory extra approval, repeated unchanged checks, or journal after every two tool calls.
+- Specialist review perspectives remain available. When delegation is permitted and useful, use independent agents on separable work; otherwise keep distinct perspectives in separate evidence passes and disclose shared-model limitations. A missing named tool or runner calls for the smallest supported equivalent, not a claim of successful execution.
+- Preserve factual claims, citations, data semantics, product behavior, source formats, and non-obvious operational constraints. Distinguish deterministic findings, expert judgment, unverified hypotheses, and genuinely missing evidence.
+- Existing source-specific tool names are adapters: use currently exposed tools with equivalent behavior. Resolve scripts and relative resource paths from the selected module's directory while keeping cwd at the user's project unless the script requires otherwise.
+- Stop at verified completion. A checkpoint records unfinished work; it never substitutes for completing already authorized work. Retry by diagnosed cause; do not blindly repeat a failed action or make destructive recovery changes.
+
+Current development evidence follows ../../../dev/references/testing.md. Mandatory TDD applies to changed executable behavior. Do not create smoke/hash validation or substitute file/import/startup probes for acceptance. For checkpoint and recovery use exact task/version identity, requirements, actual state and ownership reconciliation. The updated handoff/resume routes govern preserved historical bundle instructions; do not invoke hash-dependent scripts by default.

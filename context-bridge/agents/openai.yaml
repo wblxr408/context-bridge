@@ -1,0 +1,6 @@
+interface:
+  display_name: "Context Bridge"
+  short_description: "Checkpoint, resume, and hand off long tasks using verified lo..."
+  default_prompt: "Use $context-bridge to complete the requested context bridge task."
+policy:
+  allow_implicit_invocation: true

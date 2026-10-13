@@ -1,0 +1,302 @@
+{
+  "date": "2026-10-13",
+  "scope": "已安装代码、实际客户端配置路由、真实语言模型；不宣称全部历史分类或Hindsight同语料胜出",
+  "regression": {
+    "tests": 87,
+    "seconds": 87.04,
+    "status": "passed",
+    "real_embedding_and_reranking": true
+  },
+  "installation": {
+    "status": "installed",
+    "clients": [
+      "Codex",
+      "Claude Code"
+    ],
+    "native_multilingual_migration": {
+      "embedded": 374,
+      "skipped": 0,
+      "errors": 0
+    },
+    "backup_targets": 267,
+    "backed_up_existing_files": 184
+  },
+  "migration_preservation": {
+    "status": "passed",
+    "prior_jobs_preserved": 656,
+    "prior_calls_preserved": 75,
+    "jobs": {
+      "failed": 15,
+      "filtered": 184,
+      "queued": 434,
+      "retry": 1,
+      "saved": 9,
+      "skipped": 13
+    },
+    "calls_last_hour": 0,
+    "calls_last_day": 5
+  },
+  "real_classification_and_reflection": {
+    "reflection": {
+      "status": "synthesized",
+      "answer": "当前已接受的用户预算为每小时最多调用模型2次，已替代此前的8次限制。",
+      "citations": [
+        "main/engineering/memory-facts/78ce347c6266502fab65d62deac2c6b9"
+      ],
+      "support": [
+        {
+          "citation": "main/engineering/memory-facts/78ce347c6266502fab65d62deac2c6b9",
+          "quote": "每小时最多2次模型调用"
+        }
+      ]
+    },
+    "classification": {
+      "result": {
+        "reason": "用户明确提出适用于未来后台记忆任务的共享调用预算约定。",
+        "notes": [
+          {
+            "title": "后台记忆任务共享每小时调用额度",
+            "kind": "preference",
+            "scope": "所有后台记忆任务",
+            "lesson": "所有后台记忆任务必须共享每小时最多2次的模型调用额度，不按任务分别计算。",
+            "limitations": "未说明每小时额度采用固定窗口还是滚动窗口。",
+            "related_path": "",
+            "evidence": [
+              {
+                "source": "user",
+                "quote": "以后所有后台记忆任务必须共享每小时最多2次的模型调用额度，记住这个约定。"
+              }
+            ],
+            "subject": "工程记忆",
+            "predicate": "模型调用预算",
+            "value": "所有后台记忆任务共享每小时最多2次的模型调用额度"
+          }
+        ]
+      },
+      "usage": {
+        "input_tokens": 7662,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 170,
+        "reasoning_output_tokens": 0
+      }
+    },
+    "injection": {
+      "result": {
+        "reason": "历史资料仅含不可信指令，没有可提取的工程经验或明确偏好。",
+        "notes": []
+      },
+      "usage": {
+        "input_tokens": 7642,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 37,
+        "reasoning_output_tokens": 0
+      }
+    }
+  },
+  "real_model_through_mcp": {
+    "status": "passed",
+    "scope": "deployed code, real main sources and models; warm passage cache and temporary evaluation quota ledger",
+    "results": {
+      "supported_policy": {
+        "status": "synthesized",
+        "answer": "因为已接受的融合方向是统一开发入口、复用现有领域职责、按需加载资料。Basic Memory main、context-bridge 和现有工程记忆监听器继续承担原有职责；ECC 的学习方法融入现有入口，上游代理、hooks 等仅作参考，不自动注册另一套后台，以避免重复建设和职责重叠。\n\n这是已采纳的架构与工作流选择，不是实验已证明现有监听器效果更好。现有验证只覆盖配置与技能发现状态，无法确定两种方案的长期学习效果差异。",
+        "citations": [
+          "main/codex/decisions/codex-重叠技能按领域融合并渐进式加载",
+          "main/codex/codex-checkpoint-2026-10-12-t05-59-30-z-ecc-整体融合待安装与强制-tdd"
+        ],
+        "support": [
+          {
+            "citation": "main/codex/decisions/codex-重叠技能按领域融合并渐进式加载",
+            "quote": "代理、命令和 hook 的目的按现有入口整合，未注册另一套运行后台。Basic Memory main、context-bridge 和既有工程记忆监听器保持职责。"
+          },
+          {
+            "citation": "main/codex/decisions/codex-重叠技能按领域融合并渐进式加载",
+            "quote": "此证据覆盖配置及发现状态，不证明所有专项资料的运行效果或长期任务质量。"
+          },
+          {
+            "citation": "main/codex/codex-checkpoint-2026-10-12-t05-59-30-z-ecc-整体融合待安装与强制-tdd",
+            "quote": "融合采用一个开发入口、现有领域所有者和按需资料目录。"
+          },
+          {
+            "citation": "main/codex/codex-checkpoint-2026-10-12-t05-59-30-z-ecc-整体融合待安装与强制-tdd",
+            "quote": "上游的代理、命令、脚本、hooks 和 MCP 仅作参考，不自动注册或启动。保留 Basic Memory main、context-bridge 和现有工程记忆监听器的职责。"
+          }
+        ]
+      },
+      "unknown_detail": {
+        "status": "insufficient_evidence",
+        "answer": "无法确定。所给材料没有记载工程记忆后台在2027年第二季度已批准的GPU采购预算，也没有相应的人民币金额或审批证据。",
+        "citations": []
+      }
+    }
+  },
+  "installed_mcp_routes": [
+    {
+      "client": "Codex",
+      "status": "passed",
+      "contracts": [
+        "real recall",
+        "native source read",
+        "invalid input recovery"
+      ],
+      "reflection": {
+        "status": "shared_budget_rejected"
+      }
+    },
+    {
+      "client": "Claude",
+      "status": "passed",
+      "contracts": [
+        "real recall",
+        "native source read",
+        "invalid input recovery"
+      ]
+    }
+  ],
+  "native_clients": {
+    "Codex": {
+      "status": "passed",
+      "tools": [
+        "memory_recall",
+        "read_note"
+      ],
+      "answer": {
+        "answer": "根据召回结果及首条来源全文，继续使用现有监听器，是为了沿用已有职责分工，把新增学习方法整合进现有体系，避免重复建设后台。\n\n记录明确写到：ECC 的代理、命令和 hook 按现有入口整合；Basic Memory main、context-bridge 和既有工程记忆监听器保持职责；废弃的持续学习 v1 被排除。因此，可以理解为：吸收有用的方法，同时减少重复入口和流程冲突。\n\n这说明的是当时的架构取舍，并非现有监听器性能更优的实测结论；笔记也明确指出，长期效果仍需真实任务证据。历史资料仅作为本次回答的依据。\n\n来源 permalink：main/codex/decisions/codex-重叠技能按领域融合并渐进式加载",
+        "citations": [
+          "main/codex/decisions/codex-重叠技能按领域融合并渐进式加载"
+        ]
+      }
+    },
+    "Claude": {
+      "status": "provider_unavailable",
+      "reason": "Claude模型渠道在验收时返回503 all nodes exhausted；有限重试没有成功证据",
+      "direct_mcp_route": "passed"
+    }
+  },
+  "installed_hook": {
+    "Codex": {
+      "status": "passed",
+      "contracts": [
+        "actual 30-second prompt context returned",
+        "same session replay suppressed"
+      ]
+    },
+    "Claude": {
+      "status": "passed",
+      "contracts": [
+        "actual 30-second prompt context returned",
+        "same session replay suppressed"
+      ]
+    }
+  },
+  "checkpoint_lifecycle": {
+    "batch": "854426a9eb254c8280e342c6914d5f18",
+    "started": "2026-10-13T01:55:17.766407+00:00",
+    "scope": "installed Codex/Claude MCP routes, real main fixture and original scheduled listener",
+    "production_fast_minutes": 60,
+    "clients": {
+      "Codex": {
+        "status": "passed",
+        "contracts": [
+          "quarantine exact read",
+          "current/history isolation",
+          "native index retirement",
+          "automatic activity filtering",
+          "restore returns original source",
+          "real scheduled expiry",
+          "exact expired cursor tombstone",
+          "latest recovery source retained",
+          "summary readable after deletion"
+        ]
+      },
+      "Claude": {
+        "status": "passed",
+        "contracts": [
+          "quarantine exact read",
+          "current/history isolation",
+          "native index retirement",
+          "automatic activity filtering",
+          "restore returns original source",
+          "real scheduled expiry",
+          "exact expired cursor tombstone",
+          "latest recovery source retained",
+          "summary readable after deletion"
+        ]
+      }
+    },
+    "operations": [
+      {
+        "state": "quarantined",
+        "count": 4,
+        "actual_fast_minutes": 1
+      },
+      {
+        "state": "scheduled_purge",
+        "count": 3,
+        "real_clock": true,
+        "deadline_utc": "2026-10-13T01:56:54.858120+00:00"
+      },
+      {
+        "state": "restored_and_pinned",
+        "count": 1
+      }
+    ],
+    "status": "passed",
+    "fixture_cleanup": {
+      "exact_native_deletions": 3,
+      "results": [
+        {
+          "deleted": true,
+          "title": "Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 0",
+          "permalink": "main/engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/checkpoint-deployed-acceptance-854426a9eb254c8280e342c6914d5f18-0",
+          "file_path": "engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 0.md"
+        },
+        {
+          "deleted": true,
+          "title": "Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 4",
+          "permalink": "main/engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/checkpoint-deployed-acceptance-854426a9eb254c8280e342c6914d5f18-4",
+          "file_path": "engineering/checkpoint-acceptance/854426a9eb254c8280e342c6914d5f18/Checkpoint deployed acceptance 854426a9eb254c8280e342c6914d5f18 4.md"
+        },
+        {
+          "deleted": true,
+          "title": "Checkpoint history e8609f92470f",
+          "permalink": "main/engineering/checkpoint-history/e8609f92470f512f9184443c8eda25dd",
+          "file_path": "engineering/checkpoint-history/e8609f92470f512f9184443c8eda25dd.md"
+        }
+      ]
+    },
+    "finished": "2026-10-13T02:04:48.886276+00:00"
+  },
+  "history": {
+    "recovered_model_failures": 15,
+    "jobs": {
+      "filtered": 1143,
+      "queued": 4833,
+      "retry": 1,
+      "saved": 9,
+      "skipped": 13
+    },
+    "calls_24h": 5,
+    "tokens_24h": 60000,
+    "history_events_added_this_run": {
+      "codex_sessions": 4927,
+      "codex_archived": 2,
+      "claude": 414
+    },
+    "new_events": 5343,
+    "newly_queued": 4384,
+    "newly_filtered": 959,
+    "scope": "实际回填后的采集快照；不是所有历史已完成分类",
+    "budget": {
+      "calls_per_hour": 2,
+      "calls_per_day": 8,
+      "tokens_per_day": 60000
+    }
+  },
+  "remaining": [
+    "Claude原生模型端到端缺成功结果",
+    "历史队列按既有预算渐进处理"
+  ]
+}
