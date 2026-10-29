@@ -1,5 +1,7 @@
 # Context Bridge
 
+[![M8ven Score](https://m8ven.ai/badge/mcp/wblxr408-context-bridge-1g1nhf?v=cc714653076f803031e714c85887629e)](https://m8ven.ai/mcp/wblxr408-context-bridge-1g1nhf?s=readme)
+
 **为 Codex 和 Claude Code 提供可恢复的任务交接、有出处的长期记忆，以及 checkpoint 的摘要、隔离、恢复和到期删除。**
 
 Context Bridge builds resumable task handoffs and evidence-backed personal memory on top of an existing Basic Memory installation. Codex and Claude Code share the same Markdown knowledge base, MCP bridge and background listener.
