@@ -75,6 +75,75 @@ class GatewayReply:
     tool_calls: tuple[dict, ...]
 
 
+def _native_messages(raw):
+    """Normalize ended native blocks; never infer execution from assistant text."""
+    blocks, usage, stop_reason, ended = {}, {}, None, False
+    for frame in raw.decode('utf-8').replace('\r\n', '\n').split('\n\n'):
+        data = '\n'.join(line[5:].lstrip() for line in frame.split('\n') if line.startswith('data:'))
+        if not data or data == '[DONE]':
+            continue
+        event = json.loads(data)
+        kind = event.get('type')
+        if kind == 'error':
+            raise ValueError('Gateway stream ended with an error')
+        if kind == 'message_start':
+            usage.update(event.get('message', {}).get('usage') or {})
+        elif kind == 'message_delta':
+            usage.update(event.get('usage') or {})
+            stop_reason = event.get('delta', {}).get('stop_reason', stop_reason)
+        elif kind == 'message_stop':
+            ended = True
+        elif kind == 'content_block_start':
+            blocks[event['index']] = dict(event['content_block'])
+        elif kind == 'content_block_delta':
+            block, delta = blocks[event['index']], event.get('delta', {})
+            if delta.get('type') == 'text_delta':
+                block['text'] = block.get('text', '') + delta['text']
+            elif delta.get('type') == 'input_json_delta':
+                block['_json'] = block.get('_json', '') + delta['partial_json']
+        elif kind == 'content_block_stop':
+            block = blocks[event['index']]
+            block['_ended'] = True
+            if '_json' in block:
+                block['input'] = json.loads(block.pop('_json'))
+    if not ended or stop_reason not in {'end_turn', 'stop_sequence', 'max_tokens'} or any(not b.get('_ended') for b in blocks.values()):
+        raise ValueError('Incomplete native tool stream')
+    calls, text = {}, []
+    for block in blocks.values():
+        kind = block.get('type')
+        if kind == 'text':
+            text.append(block.get('text', ''))
+        elif kind in {'server_tool_use', 'mcp_tool_use'}:
+            call = {'id': block['id'], 'type': 'mcp' if kind == 'mcp_tool_use' else block.get('name'),
+                    'status': 'in_progress'}
+            if kind == 'mcp_tool_use':
+                call.update(server=block.get('server_name'), name=block.get('name'))
+            elif block.get('name') == 'code_execution':
+                call['code'] = block.get('input', {}).get('code')
+            calls[block['id']] = call
+        elif kind == 'mcp_tool_result':
+            call = calls.get(block.get('tool_use_id'))
+            if call:
+                content = block.get('content', [])
+                call.update(status='failed' if block.get('is_error') else 'completed',
+                    output=content if isinstance(content, str) else '\n'.join(x['text'] for x in content if x.get('type') == 'text'))
+        elif kind == 'code_execution_tool_result':
+            call = calls.get(block.get('tool_use_id'))
+            content = block.get('content', {})
+            if call and isinstance(content, dict):
+                exit_code = _integer(content.get('return_code'))
+                call.update(status='completed' if exit_code == 0 else 'failed',
+                            stdout=content.get('stdout'), stderr=content.get('stderr'), exit_code=exit_code)
+    input_parts = [_integer(usage.get('input_tokens')),
+                   _integer(usage.get('cache_read_input_tokens', 0)),
+                   _integer(usage.get('cache_creation_input_tokens', 0))]
+    total_input = sum(input_parts) if all(p is not None for p in input_parts) else None
+    return {'choices': [{'message': {'content': '\n'.join(text)},
+                         'finish_reason': 'length' if stop_reason == 'max_tokens' else 'stop'}],
+            'usage': dict(usage, prompt_tokens=total_input, completion_tokens=usage.get('output_tokens')),
+            'otari_tool_calls': list(calls.values())}
+
+
 class GatewayClient:
     def __init__(self, config):
         self.settings = dict(config.get('otari') or {})
@@ -129,6 +198,14 @@ class GatewayClient:
             raise GatewayError('configuration', 'Operation ID must be printable ASCII, 1–255 characters')
         body = {'model': model, 'messages': messages, 'max_tokens': self.max_tokens,
                 'temperature': 0, 'stream': False}
+        efforts = self.settings.get('reasoning_effort', {})
+        if not isinstance(efforts, dict):
+            raise GatewayError('configuration', 'Reasoning effort must be configured by model role')
+        if role in efforts:
+            effort = efforts[role]
+            if effort not in ('none', 'minimal', 'low', 'medium', 'high', 'xhigh'):
+                raise GatewayError('configuration', 'Unsupported reasoning effort for role ' + role)
+            body['reasoning_effort'] = effort
         if schema is not None:
             body['response_format'] = {'type': 'json_schema', 'json_schema': {
                 'name': 'memory_result', 'strict': True, 'schema': schema}}
@@ -138,12 +215,31 @@ class GatewayClient:
         if mcp_server_ids:
             body['mcp_server_ids'] = list(mcp_server_ids)
             body['max_tool_iterations'] = min(10, max(1, int(self.settings.get('max_tool_iterations', 5))))
+        native_tools = bool(mcp_server_ids or any(t.get('type') == 'otari_code_execution' for t in (tools or [])))
+        transport = self.settings.get('tool_transport', 'chat')
+        if transport not in {'chat', 'messages'}:
+            raise GatewayError('configuration', 'Tool transport must be chat or messages')
+        native_tools = native_tools and transport == 'messages'
+        if native_tools:
+            if schema is not None:
+                raise GatewayError('configuration', 'Native tool turns do not accept a JSON schema')
+            body['messages'] = [m for m in messages if m['role'] != 'system']
+            body['system'] = '\n\n'.join(m['content'] for m in messages if m['role'] == 'system')
+            body['stream'] = True
+            body.pop('reasoning_effort', None)
+            if tools:
+                body['tools'] = [dict(t, type='code_execution_20250522', name='code_execution')
+                    if t.get('type') == 'otari_code_execution' else t for t in tools]
         encoded = json.dumps(body, ensure_ascii=False, allow_nan=False).encode('utf-8')
         if len(encoded) > self.max_request_bytes:
             raise GatewayError('request_too_large', 'Evidence exceeds the configured gateway request limit')
-        request = Request(self.base_url + '/chat/completions', data=encoded, method='POST', headers={
+        request = Request(self.base_url + ('/messages' if native_tools else '/chat/completions'), data=encoded, method='POST', headers={
             'Authorization': 'Bearer ' + self.key, 'Content-Type': 'application/json',
             'Idempotency-Key': operation_id})
+        if native_tools:
+            request.add_header('anthropic-version', '2023-06-01')
+            if mcp_server_ids:
+                request.add_header('anthropic-beta', 'mcp-client-2025-11-20')
         started = time.monotonic()
         try:
             with self.opener.open(request, timeout=self.timeout) as response:
@@ -170,7 +266,7 @@ class GatewayClient:
         metadata = {'request_id': headers.get('Otari-Request-ID'), 'operation_id': operation_id,
                     'role': role, 'requested_model': model, 'cost_usd': None}
         try:
-            result = json.loads(raw)
+            result = _native_messages(raw) if native_tools else json.loads(raw)
             message = result['choices'][0]['message']
             content = message.get('content') or ''
             if not isinstance(content, str) or message.get('refusal') or message.get('tool_calls'):
@@ -182,6 +278,8 @@ class GatewayClient:
                                       round((time.monotonic() - started) * 1000))
             normalized = {'input_tokens': _integer(usage.get('prompt_tokens')),
                           'output_tokens': _integer(usage.get('completion_tokens')), 'otari': metadata}
+            if result['choices'][0].get('finish_reason') == 'length':
+                raise GatewayError('output_limit', 'Model exhausted its output allowance before completing the result; adjust role reasoning or output limit', dispatched=True)
             value = json.loads(content) if schema is not None else None
             if schema is not None:
                 validate_json(value, schema)

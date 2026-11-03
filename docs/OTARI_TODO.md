@@ -28,8 +28,9 @@ This is ordinary task documentation; no new OpenSpec change is being created.
   rubric evidence map, participant-recorded 3–5 minute demo outline and written feedback.
 - [ ] I. Hosted acceptance: real requests for both model roles, web/code/MCP, actual
   routing and budget behavior; record remaining unverified items honestly.
-  Deferred explicitly by the user on 2026-11-03: finish code/materials first;
-  configure the API credential later. No hosted success or score is claimed.
+  Subsequently authorized with a USD 0.20 ceiling. Both models, web, code, remote
+  MCP, named routing and hosted budget refusal/recovery have real evidence.
+  Actual provider fallback remains unverified; see [hosted report](OTARI_HOSTED_ACCEPTANCE.md).
 
 ## Stages and evidence
 
@@ -75,19 +76,17 @@ Stage 2 was committed and pushed as `3c937e3`. Stage 3 implements the local
 workbench and a separate authenticated MCP-only HTTP app, using the official MCP
 SDK 2.2 transport. Both bind loopback by default. Remote publication additionally
 requires an exact scope and explicit permalink allowlist; it cannot invoke models
-or write memory. External HTTPS reachability has not been deployed or verified.
+or write memory. At that stage external HTTPS reachability had not yet been verified.
 Stage 3 was committed and pushed as `7615ac1`. Stage 4 closes current-change recovery
 and evidence gaps and delivers [setup](OTARI_GUIDE.md), [demo/submission material](OTARI_SUBMISSION.md)
-and fictional [demo data](demo/conversations.json). The user's latest instruction is
+and fictional [demo data](demo/conversations.json). The user then instructed us
 to complete code/materials and defer credential configuration. Implementation is
 local in `D:/context-bridge-otari`; installed listeners and `D:/ContextRail` are untouched.
 
-Continuation after credentials: select two actually available open-weight models,
-run the fictional demo through hosted Otari, verify real web/code/routing/spending
-behavior, then authorize/publish only the curated HTTPS MCP surface and validate it
-through Otari. Record actual request IDs and costs; obtain organizer eligibility /
-deadline-timezone confirmation and participant-recorded videos before submission.
-Do not infer hosted success from these tests or automatically send submission mail.
+The subsequent authorized hosted phase has now run, with request IDs, costs and
+failures in the hosted report. Remaining work: actual provider fallback, a coherent
+participant-run demonstration, eligibility/timezone confirmation and participant videos.
+Submission mail has not been sent.
 
 ## Sources
 
@@ -140,9 +139,9 @@ IDs prevent a second reservation across a task-journal gap. Current-change cover
 totals 30 passing cases across the staged runs, not a fresh run of unchanged suites.
 No legacy regression, startup/import probes, checksum comparisons or smoke checks run.
 
-Hosted phase remains outstanding by explicit user choice. Demo/submission descriptions
-and written feedback are reviewable drafts; real-use details and participant videos
-must be filled after hosted acceptance. No competition submission was sent.
+At the end of Stage 4, the hosted phase was deferred by explicit user choice.
+Demo/submission descriptions remained drafts. Later evidence below supersedes this
+historical hosted status; no competition submission was sent.
 
 2026-11-03 follow-up: user supplied the Maple Ridge House design reference and
 authorized local encrypted credential storage. The workbench now uses its cream/
@@ -152,3 +151,26 @@ dashboard contracts pass; old suites were not rerun. User credential is stored o
 the repository with Windows user DPAPI, injected only into the launched process by
 an ignored local launcher. Authenticated model-catalog retrieval returned 159 entries.
 This resolves credential setup, not hosted inference/tool/routing/budget acceptance.
+
+2026-11-03 hosted continuation: user authorized USD 0.20 total and the temporary
+HTTPS publication of one existing fictional note with three read-only tools.
+Real extraction/retention/citation, web search/materialization/exact quotes, sandbox
+code/stdout/exit 0, remote MCP search/read and adopted versioned quotation, and an
+Otari spend-ceiling refusal followed by same-task recovery were recorded. A named
+route served a request. Attempted unavailable-primary fault injection was rejected
+by Otari's configuration validation; no actual fallback record was obtained.
+The normal route remains valid; no provider credentials were changed.
+
+Hosted findings drove bounded fixes: role-level reasoning, output-limit rejection,
+workbench-specific preference extraction and grounded synthesis, readable HTML
+paragraph extraction preserving pre blocks, and Messages native code/MCP results.
+Uncertain streams require reconciliation rather than re-dispatch: a real repeated
+stream was charged despite the same operation key. The extra USD 0.011151 is included
+in the reported USD 0.085749 total, rather than hidden outside the app's ledger.
+Current-change RED/GREEN: 4 reasoning cases, 3 HTML evidence cases, 6 native tool and
+recovery cases. No unchanged regression suite was run.
+
+Tunnel and demo MCP process stopped; Otari server disabled, temporary token removed,
+active local MCP IDs cleared. The USD 0.20 never-reset ceiling remains, without
+clearing spend. Model, cost, source and semantic-quality limits are documented in
+[OTARI_HOSTED_ACCEPTANCE.md](OTARI_HOSTED_ACCEPTANCE.md).

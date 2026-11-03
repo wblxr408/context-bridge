@@ -24,23 +24,53 @@ def approved_url(url, domains):
 
 
 class _Text(HTMLParser):
+    blocks = {'p', 'div', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'tr',
+              'section', 'article', 'header', 'footer', 'nav', 'dt', 'dd', 'blockquote'}
+
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.skip, self.parts = 0, []
+        self.skip, self.parts, self.buffer, self.pre = 0, [], [], 0
+
+    def flush(self):
+        raw = ''.join(self.buffer)
+        self.buffer.clear()
+        text = raw.strip('\r\n') if self.pre else ' '.join(raw.split())
+        if text.strip():
+            self.parts.append(text)
 
     def handle_starttag(self, tag, attrs):
         if tag in {'script', 'style', 'noscript', 'svg'}:
             self.skip += 1
-        elif tag in {'p', 'div', 'br', 'li', 'h1', 'h2', 'h3', 'tr', 'pre'} and not self.skip:
-            self.parts.append('\n')
+        elif not self.skip:
+            if tag == 'pre':
+                self.flush()
+                self.pre += 1
+            elif tag == 'br' and self.pre:
+                self.buffer.append('\n')
+            elif not self.pre and (tag in self.blocks or tag == 'br'):
+                self.flush()
 
     def handle_endtag(self, tag):
         if tag in {'script', 'style', 'noscript', 'svg'} and self.skip:
             self.skip -= 1
+        elif not self.skip:
+            if tag == 'pre' and self.pre:
+                self.flush()
+                self.pre -= 1
+            elif not self.pre and tag in self.blocks:
+                self.flush()
 
     def handle_data(self, data):
         if not self.skip:
-            self.parts.append(data)
+            self.buffer.append(data)
+
+
+def extract_html_text(raw):
+    parser = _Text()
+    parser.feed(raw)
+    parser.close()
+    parser.flush()
+    return '\n\n'.join(parser.parts)
 
 
 def fetch_public_source(url):
@@ -72,9 +102,7 @@ def fetch_public_source(url):
                 raise SourceError('Source exceeds text limits')
             text = raw.decode('utf-8', errors='replace')
             if content_type == 'text/html':
-                parser = _Text()
-                parser.feed(text)
-                text = '\n'.join(line.strip() for line in ''.join(parser.parts).splitlines() if line.strip())
+                text = extract_html_text(text)
             if not text.strip():
                 raise SourceError('Source has no readable text')
             return {'url': url, 'title': host + (parsed.path or '/'), 'text': text[:60000]}
