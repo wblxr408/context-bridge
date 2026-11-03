@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "approved": {"type": "boolean"},
+    "issues": {"type": "array", "maxItems": 6, "items": {"type": "string", "minLength": 1, "maxLength": 800}}
+  },
+  "required": ["approved", "issues"]
+}

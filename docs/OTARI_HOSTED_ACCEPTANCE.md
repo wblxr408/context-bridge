@@ -1,5 +1,10 @@
 # Otari 托管验收 · 2026-11-03
 
+**补充验收已完成：真实 DeepInfra 404 → Nebius 第二次尝试成功，五项回答质量目标
+分阶段通过；累计费用 USD 0.115487，未知费用调用 0，仍低于 USD 0.20。**
+详见[回退与质量补充报告](OTARI_FOLLOWUP_ACCEPTANCE.md)及[请求证据](otari-followup-evidence.json)。
+下文保留此前 USD 0.085749 阶段的结果和失败记录；其中“回退未验证”是历史状态。
+
 在本机 Windows 的独立比赛克隆 `D:/context-bridge-otari` 中运行真实应用流程，
 请求发往 `https://otari.ai/api/v1`。材料全部为虚构退款服务约定和公开 Python 文档。
 用户授权总额 USD 0.20，并单独批准临时公开一份演示笔记供 Otari MCP 读取。

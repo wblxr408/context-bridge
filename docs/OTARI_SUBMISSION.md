@@ -25,9 +25,11 @@ HTTP MCP service publishes only selected read-only sources and revisions.
 
 Hosted extraction, synthesis, official web search, sandbox execution, remote MCP
 reads and a spend-ceiling refusal followed by same-task recovery now have real
-application evidence. A named routing policy has served a request; provider fallback
-has **not** been observed. See [acceptance and limitations](OTARI_HOSTED_ACCEPTANCE.md)
-and [request evidence](otari-hosted-evidence.json). The temporary MCP endpoint is closed.
+application evidence. A controlled DeepInfra 404 was absorbed and the same logical
+request succeeded on Nebius at attempt two. Source filtering and a bounded
+candidate/review/revision gate improve grounded answers; they do not guarantee
+correct reasoning. See [follow-up acceptance](OTARI_FOLLOWUP_ACCEPTANCE.md) and
+[request evidence](otari-followup-evidence.json). The temporary MCP endpoint is closed.
 
 ## 4 分钟真人演示提纲
 
@@ -37,8 +39,8 @@ and [request evidence](otari-hosted-evidence.json). The temporary MCP endpoint i
 | 0:25–1:05 | 粘贴演示对话，使用第一个开放权重模型提取；输入明确修正 | 原句、当前事实、提取请求与模型 |
 | 1:05–1:55 | 问 `lru_cache` 能否保证并发只执行一次，启用官方网页核对 | 实际 Otari 搜索、允许域名、快照、第二模型综合与精确引用 |
 | 1:55–2:30 | 展开代码分析与调用账本 | 实际代码/stdout/exit code，网关费用及未知值 |
-| 2:30–3:10 | 展示已取得的预算拒绝与原任务恢复；解释已配置的路由及尚缺回退证据 | Otari 拒绝记录、相同 operation key、保存的来源与恢复结果 |
-| 3:10–3:40 | 实际使用 HTTPS MCP 搜索和读取已发布原文 | 完成的 MCP 调用、来源版本、原文参与回答 |
+| 2:30–3:10 | 展示已取得的预算拒绝/恢复及真实受控回退 | Otari 拒绝记录、相同 operation key、DeepInfra 404 Absorbed 与 Nebius 第 2 次成功 |
+| 3:10–3:40 | 回读已保存的真实 MCP 调用与原文，沿用来源重新提问 | 完成的 MCP 调用、来源版本、仅远程引用；临时入口当前已关闭 |
 | 3:40–4:00 | 说明不足证据行为、已知限制与 Otari 集成价值 | 不足证据任务与实际完成范围 |
 
 录制前先取得所有要声称的真实结果。缺少的能力应从讲稿中删除或明确说尚未完成。
@@ -73,9 +75,19 @@ again. Clarifying this boundary near the idempotency API examples would help cli
 avoid duplicate spending. The app now requires reconciliation after uncertain streams.
 
 **Limits:** These were bounded runs with fictional materials, with reported spend
-USD 0.085749. Provider fallback was not demonstrated. Exact-quotation checks do not
-guarantee semantic quality; observed answer-selection and wording issues are retained
-in the acceptance report. This draft still needs the participant's review before sending.
+USD 0.115487 after the follow-up, including unsuccessful exploration and reviewer
+evaluations. A controlled incompatible-model request produced a real DeepInfra 404
+and succeeded on Nebius, with fallback=true and attempt_count=2. It is not a provider
+outage experiment. The test policy was restored to compatible chat models.
+
+Nebius strict-schema decoding once emitted whitespace until the output limit. A
+per-role JSON-object mode with full local schema validation addressed that carrier
+issue. Exact quotes and even a 397B semantic reviewer still admitted irrelevant
+citations in one answer. We retained that failure, tightened citation relevance and
+verified its rejection, then completed a bounded revision to abstention. Source
+scope and accounting boundaries are also enforced by application data. These finite
+checks do not establish general answer accuracy. This draft still needs the
+participant's review before sending.
 
 ## 提交清单
 

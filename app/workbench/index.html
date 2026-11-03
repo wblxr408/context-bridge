@@ -30,6 +30,8 @@
       <form id="research-form">
         <label class="sr-only" for="question">研究问题</label>
         <textarea id="question" name="query" required maxlength="4000" rows="4" placeholder="例如：退款任务重试时，怎样确保只产生一次业务效果？"></textarea>
+        <input id="evidence-task" type="hidden"><p id="reuse-note" class="muted" hidden></p>
+        <label for="source-policy">回答引用范围</label><select id="source-policy"><option value="all">所有选定来源</option><option value="remote_only">仅远程发布原文</option></select>
         <details class="conversation"><summary>添加对话原文 <span>可选</span></summary><label for="conversation">用户原话</label><textarea id="conversation" rows="3" maxlength="45000" placeholder="粘贴需要记住的明确约定或最新修正。"></textarea><label for="scope">记忆范围</label><input id="scope" placeholder="global" maxlength="1000"></details>
         <div class="form-bottom"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM8 12l3 3 5-6"/></svg>原句可回读，过程可接续</span><button id="submit" type="submit" class="primary"><span id="submit-label">开始研究</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
       </form>
@@ -52,6 +54,7 @@
     <article class="answer-panel soft-panel">
       <div class="result-top"><span id="task-status" class="status"></span><button id="resume" class="primary compact" hidden>继续任务</button></div>
       <h2 id="result-title"></h2><p id="task-time" class="muted"></p>
+      <p id="quality-status" class="muted" hidden></p><p id="accounting-snapshot" class="muted" hidden></p><button id="reuse-sources" type="button">沿用来源重新提问</button>
       <div id="task-error" class="notice" role="alert" hidden></div>
       <div id="answer" class="answer"></div><div id="citations" class="citations" aria-label="回答引用"></div>
       <div id="source-warnings" class="warnings"></div>

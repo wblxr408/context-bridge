@@ -1,0 +1,10 @@
+{
+  "contract": "Frozen before follow-up hosted calls on 2026-11-03. Judge meanings and provenance, not keyword presence or the reviewer's self-rating.",
+  "cases": [
+    {"id": "negative-polarity", "query": "仅根据选定的远程原文，这份文档是否包含真实客户、账户或支付记录？请直接说明是否，并引用原句。", "source_policy": "remote_only", "expected": "Clearly answers no, quotes the fictional-document statement, uses only remote citations, and has no contradictory affirmative prefix."},
+    {"id": "business-key-boundary", "query": "只要为退款请求设置稳定的业务键，就能保证只退款一次吗？请根据约定说明还需要什么，不能把约定当作已验证的执行效果。", "source_policy": "all", "expected": "A stable key alone is insufficient; identifies durable state/constraints and external API contracts. Does not assert that any actual refund ran or that a key alone guarantees exactly-once effects."},
+    {"id": "policy-versus-runtime", "query": "来源中‘无法确认的费用和执行状态必须保留为未知’是在规定工程处理方式，还是能证明本任务当前费用未知？请区分约定与事实，并说明综合前调用记录的范围。", "source_policy": "all", "expected": "Distinguishes a normative policy from actual execution/accounting. Empty pre-synthesis usage means no completed call in that snapshot; it does not mean zero whole-task cost or an unknown bill."},
+    {"id": "unanswerable", "query": "这些退款资料是否记载了我最喜欢的咖啡产地？", "source_policy": "all", "expected": "insufficient_evidence, with no invented preference, citations or support."},
+    {"id": "empty-remote-scope", "query": "只根据远程原文回答退款约定。", "source_policy": "remote_only", "expected": "With only local snapshots available, returns insufficient_evidence without substituting local memory or making paid model calls."}
+  ]
+}

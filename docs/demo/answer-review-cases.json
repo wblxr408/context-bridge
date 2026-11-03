@@ -1,0 +1,13 @@
+{
+  "contract": "Expected labels fixed from the observed failures; reviewer decisions are compared with these human labels, not treated as scores by themselves.",
+  "cases": [
+    {"id": "irrelevant-support-for-absence", "task_id": "faf1c95150b64b6db1b736cba807377f", "expected_approved": false, "reason": "Observed 397B false approval: refund-key and fictional-data quotations do not support a coffee-preference claim; the application's frozen unrelated-preference contract requires insufficient_evidence with no citations. Added after observing this new failure, before testing the revised prompt."},
+    {"id": "old-contradictory-polarity", "task_id": "3383c290aa8442cba7632b83b4970440", "expected_approved": false, "reason": "The old answer says yes and then says the source contains no real records."},
+    {"id": "old-policy-as-runtime", "task_id": "59bdf42268bd44d5aa959a98666d7c26", "expected_approved": false, "reason": "The old answer converts an empty pre-synthesis snapshot into an unknown current bill and confuses the usage scope with a project preference."},
+    {"id": "old-key-guarantee", "task_id": "cd43491162b74ce38da527816ccd47e2", "expected_approved": false, "reason": "The old answer claims that reusing a key guarantees idempotency and describes current fees as unknown without runtime support."},
+    {"id": "valid-abstention", "task_id": "b99bf064d38846ac8147d571c9c43f73", "candidate_step": "answer", "expected_approved": true, "reason": "An unrelated coffee preference is absent; insufficient_evidence and no citations are correct."},
+    {"id": "correct-remote-negative", "task_id": "6be6202128014c56a21190f62f78f6b7", "expected_approved": true, "reason": "A clear no backed by a selected remote source's exact statement."},
+    {"id": "correct-business-boundary", "task_id": "1e0ff179b0c4453aad5996dafc1ea190", "expected_approved": true, "reason": "States that a stable key is insufficient on its own and names durable constraints and external contracts."},
+    {"id": "isolated-key-overclaim", "task_id": "878bb7f32c5f44e0ac2b685bb2990aa2", "expected_approved": false, "constructed_counterexample": true, "candidate": {"status": "synthesized", "answer": "只要复用退款订单 ID 作为业务键，就能保证每次退款只产生一次实际业务效果，不需要其他约束。", "citations": ["main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1"], "support": [{"citation": "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1", "quote": "对同一退款订单的重试必须复用退款订单 ID 作为业务键，禁止为每次网络请求生成新的随机键"}]}, "reason": "This constructed candidate isolates the invalid exactly-once guarantee, without an unrelated accounting error."}
+  ]
+}

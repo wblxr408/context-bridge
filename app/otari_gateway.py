@@ -207,8 +207,16 @@ class GatewayClient:
                 raise GatewayError('configuration', 'Unsupported reasoning effort for role ' + role)
             body['reasoning_effort'] = effort
         if schema is not None:
-            body['response_format'] = {'type': 'json_schema', 'json_schema': {
-                'name': 'memory_result', 'strict': True, 'schema': schema}}
+            modes = self.settings.get('response_modes', {})
+            if not isinstance(modes, dict) or modes.get(role, 'json_schema') not in {'json_schema', 'json_object'}:
+                raise GatewayError('configuration', 'Structured response mode must be json_schema or json_object by role')
+            if modes.get(role) == 'json_object':
+                body['response_format'] = {'type': 'json_object'}
+                body['messages'] = [{'role': 'system', 'content': 'Required response JSON schema: ' +
+                    json.dumps(schema, ensure_ascii=False)}] + messages
+            else:
+                body['response_format'] = {'type': 'json_schema', 'json_schema': {
+                    'name': 'memory_result', 'strict': True, 'schema': schema}}
         if tools:
             body['tools'] = tools
             body['max_tool_iterations'] = min(10, max(1, int(self.settings.get('max_tool_iterations', 5))))

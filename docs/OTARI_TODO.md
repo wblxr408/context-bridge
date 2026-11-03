@@ -26,11 +26,12 @@ This is ordinary task documentation; no new OpenSpec change is being created.
   sources, fallback, budget refusal, malformed output, interruption/resume and MCP bounds.
 - [x] H. Delivery: reproducible setup, example configuration without secrets, demo data,
   rubric evidence map, participant-recorded 3–5 minute demo outline and written feedback.
-- [ ] I. Hosted acceptance: real requests for both model roles, web/code/MCP, actual
+- [x] I. Hosted acceptance: real requests for both model roles, web/code/MCP, actual
   routing and budget behavior; record remaining unverified items honestly.
   Subsequently authorized with a USD 0.20 ceiling. Both models, web, code, remote
   MCP, named routing and hosted budget refusal/recovery have real evidence.
-  Actual provider fallback remains unverified; see [hosted report](OTARI_HOSTED_ACCEPTANCE.md).
+  Controlled real DeepInfra 404 followed by Nebius success now completes fallback
+  evidence; see [follow-up report](OTARI_FOLLOWUP_ACCEPTANCE.md).
 
 ## Stages and evidence
 
@@ -84,7 +85,7 @@ to complete code/materials and defer credential configuration. Implementation is
 local in `D:/context-bridge-otari`; installed listeners and `D:/ContextRail` are untouched.
 
 The subsequent authorized hosted phase has now run, with request IDs, costs and
-failures in the hosted report. Remaining work: actual provider fallback, a coherent
+failures in the hosted report. Remaining submission work: a coherent
 participant-run demonstration, eligibility/timezone confirmation and participant videos.
 Submission mail has not been sent.
 
@@ -174,3 +175,14 @@ Tunnel and demo MCP process stopped; Otari server disabled, temporary token remo
 active local MCP IDs cleared. The USD 0.20 never-reset ceiling remains, without
 clearing spend. Model, cost, source and semantic-quality limits are documented in
 [OTARI_HOSTED_ACCEPTANCE.md](OTARI_HOSTED_ACCEPTANCE.md).
+
+2026-11-03 fallback/quality continuation: real absorbed DeepInfra 404 and served
+Nebius second attempt recorded. Source-policy filtering, immutable-source reuse,
+bounded candidate/review/revision publication and deterministic pre-synthesis usage
+facts added. Ten new minimal current-change contracts passed in staged RED/GREEN
+runs. Five semantic/source targets completed; seven initial reviewer classifications
+matched fixed labels, then a newly observed false approval was corrected and its
+eighth targeted counterexample rejected. These are staged results, not a single
+benchmark or accuracy guarantee. Browser source reuse without remote evidence made
+zero model calls. Cumulative USD0.115487; unknown-cost calls zero; hosted ceiling
+USD0.20 never reset. See [follow-up report](OTARI_FOLLOWUP_ACCEPTANCE.md).

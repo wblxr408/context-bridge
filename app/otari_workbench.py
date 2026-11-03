@@ -58,7 +58,7 @@ def create_app(workflow):
                 if len(raw) > 65536:
                     return JSONResponse({'error': '输入过长，请缩短对话原文。'}, 413)
             value = json.loads(raw)
-            if not isinstance(value, dict) or set(value) - {'query', 'scope', 'web', 'analyze', 'event', 'mcp'}:
+            if not isinstance(value, dict) or set(value) - {'query', 'scope', 'web', 'analyze', 'event', 'mcp', 'source_policy', 'evidence_task_id'}:
                 raise ValueError('Unknown task fields')
             task = workflow.create(**value)
         except (ValueError, TypeError):

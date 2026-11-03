@@ -1,5 +1,8 @@
 {
   "date": "2026-11-03",
+  "historical_stage_note": "This file preserves the earlier USD0.085749 stage. The follow-up report supersedes its pending fallback and semantic-quality status without rewriting the old runs.",
+  "followup_evidence": "otari-followup-evidence.json",
+  "current_cumulative_reported_usd": "0.115487",
   "token_count_note": "Earlier Messages records predate inclusion of cache-read/cache-creation input tokens. Their reported input counts are partial; missing historical splits were not fabricated. Actual reported dollar costs are preserved.",
   "execution": "local Windows application -> hosted Otari; fictional demo only",
   "total_reported_usd": "0.085749",

@@ -4,6 +4,7 @@ Retries retain exact prepared requests, operation keys and budget reservations.
 Completed tool results are journaled before subsequent business effects.
 """
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 import json
 from pathlib import Path
 import time
@@ -19,6 +20,22 @@ HERE = Path(__file__).resolve().parent
 
 def now():
     return datetime.now(timezone.utc).isoformat()
+
+
+def usage_facts(rows):
+    known, unknown = [], 0
+    for row in rows:
+        try:
+            amount = Decimal(str((row.get('otari') or {}).get('cost_usd')))
+            if not amount.is_finite() or amount < 0:
+                raise InvalidOperation
+            known.append(amount)
+        except InvalidOperation:
+            unknown += 1
+    return {'scope': 'completed_calls_before_initial_synthesis', 'completed_calls': len(rows),
+            'reported_subtotal_usd': str(sum(known, Decimal('0'))) if known else None,
+            'unknown_cost_calls': unknown, 'includes_whole_task_cost': False,
+            'interpretation': '没有已完成调用时，不能据此把整个任务费用断言为零或未知；工程约定不证明实际退款或执行状态。'}
 
 
 def supported_answer(response, sources, observations=()):
@@ -57,27 +74,45 @@ class ResearchWorkflow:
                 source_id TEXT NOT NULL, body TEXT NOT NULL, PRIMARY KEY(url,revision));
             ''')
 
-    def create(self, query, *, scope=None, web=False, analyze=False, event=None, mcp=False):
+    def create(self, query, *, scope=None, web=False, analyze=False, event=None, mcp=False,
+               source_policy='all', evidence_task_id=None):
         if not isinstance(query, str) or not 1 <= len(query.strip()) <= 4000:
             raise ValueError('Question must contain 1–4000 characters')
         if scope is not None and (not isinstance(scope, str) or len(scope) > 1000):
             raise ValueError('Invalid memory scope')
         if any(not isinstance(flag, bool) for flag in (web, analyze, mcp)):
             raise ValueError('Tool choices must be booleans')
+        if source_policy not in ('all', 'remote_only'):
+            raise ValueError('Unknown evidence policy')
+        prior = None
+        if evidence_task_id is not None:
+            if not isinstance(evidence_task_id, str) or not 1 <= len(evidence_task_id) <= 100 or event:
+                raise ValueError('Saved-source reuse requires one task and no new conversation')
+            try:
+                prior = self.get(evidence_task_id)
+            except KeyError:
+                raise ValueError('Saved evidence task is unavailable') from None
+            if prior['status'] != 'completed' or (scope is not None and scope != prior['scope']):
+                raise ValueError('Reuse completed evidence within its original scope')
+            scope = prior['scope']
         if event is not None and (not isinstance(event, dict) or
                 any(not isinstance(event.get(k, ''), str) for k in ('user', 'final')) or
                 len(event.get('user', '') + event.get('final', '')) > 50000):
             raise ValueError('Conversation must contain bounded user/final text')
         gateway = {k: v for k, v in (self.config.get('otari') or {}).items() if k in {
             'base_url', 'api_key_env', 'models', 'timeout_seconds', 'max_output_tokens',
-            'max_request_bytes', 'max_response_bytes', 'max_tool_iterations', 'allow_loopback_http', 'reasoning_effort', 'tool_transport'}}
+            'max_request_bytes', 'max_response_bytes', 'max_tool_iterations', 'allow_loopback_http', 'reasoning_effort', 'tool_transport', 'response_modes'}}
         task = {'id': uuid4().hex, 'query': query.strip(), 'scope': scope,
                 'web': bool(web), 'analyze': bool(analyze), 'mcp': bool(mcp),
                 'event': ({'user': event.get('user', ''), 'final': event.get('final', '')} if event else None),
                 'created_at': now(), 'updated_at': now(),
                 'gateway': gateway, 'domains': list(self.config.get('research', {}).get('official_domains', [])),
                 'mcp_server_ids': list(self.config.get('research', {}).get('mcp_server_ids', [])),
+                'source_policy': source_policy, 'evidence_task_id': evidence_task_id,
+                'review_required': bool(gateway.get('models', {}).get('review')),
                 'status': 'pending', 'steps': [], 'sources': [], 'source_warnings': [], 'answer': None}
+        if prior is not None:
+            task.update(sources=prior['sources'], observations=prior.get('observations', []), retrieved=True)
         with self.memory.lock, self.memory.db:
             self.memory.db.execute('INSERT INTO otari_tasks(id,body) VALUES(?,?)',
                                    (task['id'], json.dumps(task, ensure_ascii=False)))
@@ -288,19 +323,60 @@ class ResearchWorkflow:
                     continue
             self._save(task)
         if not task.get('answer'):
+            if task.get('source_policy') == 'remote_only':
+                task['sources'] = [s for s in task['sources'] if s.get('kind') == 'remote_mcp']
+                task['observations'] = []
             if not task['sources'] and not task.get('observations'):
                 task['answer'] = {'status': 'insufficient_evidence', 'answer': '没有足够的相关来源支持回答。', 'citations': [], 'support': []}
             else:
                 allowed = list(dict.fromkeys([s['permalink'] for s in task['sources']] +
                     [h['source'] for row in task.get('observations', []) for h in row['current_evidence']]))
-                evidence = {'query': task['query'], 'sources': task['sources'], 'observations': task.get('observations', []),
+                evidence = task.get('answer_context') or {'query': task['query'], 'sources': task['sources'], 'observations': task.get('observations', []),
                             'allowed_citations': allowed,
+                            'source_policy': task.get('source_policy', 'all'),
+                            'accounting_scope': 'completed_calls_before_initial_synthesis',
                             'run_usage': [s['result']['usage'] for s in task['steps'] if s.get('result')]}
-                result = self._step(task, 'answer', [
-                    {'role': 'system', 'content': (HERE / 'workbench-reflect-instructions.txt').read_text(encoding='utf-8')},
-                    {'role': 'user', 'content': json.dumps(evidence, ensure_ascii=False)}],
-                    role='reflect', schema=json.loads((HERE / 'reflect-schema.json').read_text(encoding='utf-8')))
-                task['answer'] = supported_answer(result['value'], task['sources'], task.get('observations', []))
+                evidence.setdefault('run_facts', usage_facts(evidence['run_usage']))
+                task['answer_context'] = evidence
+                self._save(task)
+                audits, issues = [], []
+                reviewed = task.get('review_required', False)
+                for attempt in range(2 if reviewed else 1):
+                    payload = dict(evidence)
+                    if issues:
+                        payload['review_issues'] = issues
+                    suffix = '_revision' if attempt else ''
+                    result = self._step(task, 'answer' + suffix, [
+                        {'role': 'system', 'content': (HERE / 'workbench-reflect-instructions.txt').read_text(encoding='utf-8')},
+                        {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}],
+                        role='reflect', schema=json.loads((HERE / 'reflect-schema.json').read_text(encoding='utf-8')))
+                    try:
+                        candidate = supported_answer(result['value'], task['sources'], task.get('observations', []))
+                    except ValueError:
+                        if not reviewed:
+                            raise
+                        issues = ['引用必须来自当前允许来源，且支持原句必须逐字存在；请重新生成。']
+                    else:
+                        if not reviewed:
+                            task['answer'] = candidate
+                            break
+                        decision = self._step(task, 'review' + suffix, [
+                            {'role': 'system', 'content': (HERE / 'workbench-review-instructions.txt').read_text(encoding='utf-8')},
+                            {'role': 'user', 'content': json.dumps(dict(evidence, candidate=candidate), ensure_ascii=False)}],
+                            role='review', schema=json.loads((HERE / 'answer-review-schema.json').read_text(encoding='utf-8')))['value']
+                        issues = decision['issues']
+                        if decision['approved'] and not issues:
+                            audits.append({'candidate_step': 'answer' + suffix, 'approved': True, 'issues': []})
+                            task['quality'] = {'state': 'approved', 'attempts': audits}
+                            task['answer'] = candidate
+                            break
+                        if not issues:
+                            issues = ['审查没有确认候选有充分依据，请谨慎修订。']
+                    audits.append({'candidate_step': 'answer' + suffix, 'approved': False, 'issues': issues})
+                    task['quality'] = {'state': 'reviewing' if attempt == 0 else 'rejected', 'attempts': audits}
+                    self._save(task)
+                if task.get('answer') is None:
+                    raise GatewayError('quality_rejected', '回答未通过证据与语义核对，候选未发布；可沿用来源重新提问。', dispatched=False)
             self._save(task)
         if task['analyze'] and not task.get('analysis'):
             ledger = [s['result']['usage'] for s in task['steps'] if s.get('result')]

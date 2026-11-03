@@ -1,0 +1,779 @@
+{
+  "date": "2026-11-03",
+  "execution": "local Windows application -> hosted Otari; saved fictional evidence; no new MCP publication",
+  "accounting": {
+    "prior_total_usd": "0.085749",
+    "this_followup_usd": "0.029738",
+    "cumulative_reported_usd": "0.115487",
+    "application_ledger_usd": "0.104336",
+    "historical_extra_stream_usd": "0.011151",
+    "authorized_cumulative_limit_usd": "0.20",
+    "unknown_cost_calls": 0,
+    "calculation": "Sum all recorded application gateway charges plus historical extra stream once; failed and evaluation calls included."
+  },
+  "fallback": {
+    "application_task": {
+      "id": "2202f9ea792648168aa720866899f026",
+      "query": "根据退款约定，重试必须采用怎样的业务键？请引用原句。",
+      "status": "completed",
+      "source_policy": "all",
+      "evidence_task_id": null,
+      "answer": {
+        "answer": "重试必须复用退款订单 ID 作为业务键。",
+        "citations": [
+          "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1"
+        ],
+        "support": [
+          {
+            "citation": "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1",
+            "quote": "对同一退款订单的重试必须复用退款订单 ID 作为业务键，禁止为每次网络请求生成新的随机键"
+          }
+        ],
+        "status": "synthesized"
+      },
+      "quality": null,
+      "error": null,
+      "run_facts": null,
+      "steps": [
+        {
+          "name": "answer",
+          "state": "completed",
+          "usage": {
+            "input_tokens": 1574,
+            "output_tokens": 135,
+            "otari": {
+              "request_id": "4f674d6f-88be-443a-9e58-6f9a76180dc6",
+              "role": "reflect",
+              "requested_model": "bridge-fallback-acceptance",
+              "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+              "provider": "nebius",
+              "fallback": true,
+              "attempt_count": 2,
+              "cost_usd": "0.000198",
+              "pricing_source": "deployment",
+              "operation_id": "bridge-2202f9ea792648168aa720866899f026-answer",
+              "latency_ms": 2032,
+              "idempotent_replay": false
+            }
+          }
+        }
+      ]
+    },
+    "absorbed_failed_request_id": "2eba7cca-e553-44ff-9905-4d44f5feff29",
+    "error": "404 model_not_found",
+    "failed_provider": "deepinfra",
+    "served_provider": "nebius",
+    "controlled_failure": "A real catalog embedding model was sent to Chat Completions; not a provider outage.",
+    "cleanup": "Test policy restored to DeepInfra Qwen3.5-35B-A3B -> Nebius Qwen3-30B-A3B-Instruct-2507"
+  },
+  "quality_cases": [
+    {
+      "phase": "negative-polarity",
+      "task": {
+        "id": "b8b62194fa9f4c48afdc80d2348d3ead",
+        "query": "仅根据选定的远程原文，这份文档是否包含真实客户、账户或支付记录？请直接说明是否，并引用原句。",
+        "status": "completed",
+        "source_policy": "remote_only",
+        "evidence_task_id": "3383c290aa8442cba7632b83b4970440",
+        "answer": {
+          "answer": "否。这份文档明确声明其为虚构工程约定，不含真实客户、账户或支付记录。",
+          "citations": [
+            "remote/Bridge public demo acceptance/main/demo/refund-policy@1793675449977617100"
+          ],
+          "support": [
+            {
+              "citation": "remote/Bridge public demo acceptance/main/demo/refund-policy@1793675449977617100",
+              "quote": "这是参赛演示用的虚构工程约定，不含真实客户、账户或支付记录。"
+            }
+          ],
+          "status": "synthesized"
+        },
+        "quality": {
+          "state": "approved",
+          "attempts": [
+            {
+              "candidate_step": "answer",
+              "approved": true,
+              "issues": []
+            }
+          ]
+        },
+        "error": null,
+        "run_facts": {
+          "scope": "completed_calls_before_initial_synthesis",
+          "completed_calls": 0,
+          "reported_subtotal_usd": null,
+          "unknown_cost_calls": 0,
+          "includes_whole_task_cost": false,
+          "interpretation": "没有已完成调用时，不能据此把整个任务费用断言为零或未知；工程约定不证明实际退款或执行状态。"
+        },
+        "steps": [
+          {
+            "name": "answer",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1155,
+              "output_tokens": 122,
+              "otari": {
+                "request_id": "5d53921a-e266-4292-84ab-04a94c16bb1f",
+                "role": "reflect",
+                "requested_model": "bridge-contest-reflect",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.000886",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-b8b62194fa9f4c48afdc80d2348d3ead-answer",
+                "latency_ms": 3313,
+                "idempotent_replay": false
+              }
+            }
+          },
+          {
+            "name": "review",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1165,
+              "output_tokens": 17,
+              "otari": {
+                "request_id": "1908d06b-0bc0-4c9c-ae6c-39f98b68c0c3",
+                "role": "review",
+                "requested_model": "alibaba/qwen-3.5-397b-a17b",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.000575",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-b8b62194fa9f4c48afdc80d2348d3ead-review",
+                "latency_ms": 1328,
+                "idempotent_replay": false
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "phase": "business-key-boundary",
+      "task": {
+        "id": "7012ced6845f45fd87dfba5a53da0d5c",
+        "query": "只要为退款请求设置稳定的业务键，就能保证只退款一次吗？请根据约定说明还需要什么，不能把约定当作已验证的执行效果。",
+        "status": "completed",
+        "source_policy": "all",
+        "evidence_task_id": "878bb7f32c5f44e0ac2b685bb2990aa2",
+        "answer": {
+          "answer": "不能。稳定的业务键是必要条件而非充分条件。根据约定，要保证只退款一次，还需要：业务状态与持久化约束的配合、外部接口的明确契约、在请求超时后先查询或核对原操作状态再决定后续动作，以及在无法确认费用和执行状态时将其保留为未知并暂停处理。这些是工程约定的要求，不代表已验证的实际执行效果。",
+          "citations": [
+            "main/demo/refund-policy",
+            "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1"
+          ],
+          "support": [
+            {
+              "citation": "main/demo/refund-policy",
+              "quote": "本地缓存只能作为优化；幂等性需要由业务状态、持久化约束和外部接口的明确契约共同保证。"
+            },
+            {
+              "citation": "main/demo/refund-policy",
+              "quote": "请求超时后先查询或核对原操作的状态，再决定如何继续。"
+            },
+            {
+              "citation": "main/demo/refund-policy",
+              "quote": "无法确认的费用和执行状态必须保留为未知。"
+            },
+            {
+              "citation": "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1",
+              "quote": "如果无法核对前次结果，应先暂停并保留未知状态"
+            }
+          ],
+          "status": "synthesized"
+        },
+        "quality": {
+          "state": "approved",
+          "attempts": [
+            {
+              "candidate_step": "answer",
+              "approved": true,
+              "issues": []
+            }
+          ]
+        },
+        "error": null,
+        "run_facts": {
+          "scope": "completed_calls_before_initial_synthesis",
+          "completed_calls": 0,
+          "reported_subtotal_usd": null,
+          "unknown_cost_calls": 0,
+          "includes_whole_task_cost": false,
+          "interpretation": "没有已完成调用时，不能据此把整个任务费用断言为零或未知；工程约定不证明实际退款或执行状态。"
+        },
+        "steps": [
+          {
+            "name": "answer",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1763,
+              "output_tokens": 271,
+              "otari": {
+                "request_id": "d6e44a8f-cd08-4c23-bf8e-5b0f4ca545a9",
+                "role": "reflect",
+                "requested_model": "bridge-contest-reflect",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.001606",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-7012ced6845f45fd87dfba5a53da0d5c-answer",
+                "latency_ms": 6735,
+                "idempotent_replay": false
+              }
+            }
+          },
+          {
+            "name": "review",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1932,
+              "output_tokens": 17,
+              "otari": {
+                "request_id": "a7f264a5-47e9-4c08-bdc3-eedef0acce79",
+                "role": "review",
+                "requested_model": "alibaba/qwen-3.5-397b-a17b",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.000920",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-7012ced6845f45fd87dfba5a53da0d5c-review",
+                "latency_ms": 1375,
+                "idempotent_replay": false
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "phase": "policy-versus-runtime",
+      "task": {
+        "id": "0bd909c95c8c4cb7b3b8206d97fd0253",
+        "query": "来源中‘无法确认的费用和执行状态必须保留为未知’是在规定工程处理方式，还是能证明本任务当前费用未知？请区分约定与事实，并说明综合前调用记录的范围。",
+        "status": "completed",
+        "source_policy": "all",
+        "evidence_task_id": "878bb7f32c5f44e0ac2b685bb2990aa2",
+        "answer": {
+          "answer": "来源中‘无法确认的费用和执行状态必须保留为未知’是规定的工程处理方式（约定），而非证明本任务当前费用未知的事实。该语句出自虚构的工程约定文档，旨在指导系统在请求超时且无法核对结果时的行为准则。关于综合前调用记录的范围，run_usage 显示为空数组，run_facts 明确指出在初始合成前没有已完成调用（completed_calls 为 0），且强调不能据此将整个任务费用断言为零或未知，工程约定本身也不代表实际的退款或执行状态。",
+          "citations": [
+            "main/demo/refund-policy",
+            "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1"
+          ],
+          "support": [
+            {
+              "citation": "main/demo/refund-policy",
+              "quote": "无法确认的费用和执行状态必须保留为未知。"
+            },
+            {
+              "citation": "main/demo/refund-policy",
+              "quote": "这是参赛演示用的虚构工程约定，不含真实客户、账户或支付记录。"
+            },
+            {
+              "citation": "main/engineering/memory-facts/12ecb6aedd9b560da241d51bdced5ef1",
+              "quote": "如果无法核对前次结果，应先暂停并保留未知状态"
+            }
+          ],
+          "status": "synthesized"
+        },
+        "quality": {
+          "state": "approved",
+          "attempts": [
+            {
+              "candidate_step": "answer",
+              "approved": true,
+              "issues": []
+            }
+          ]
+        },
+        "error": null,
+        "run_facts": {
+          "scope": "completed_calls_before_initial_synthesis",
+          "completed_calls": 0,
+          "reported_subtotal_usd": null,
+          "unknown_cost_calls": 0,
+          "includes_whole_task_cost": false,
+          "interpretation": "没有已完成调用时，不能据此把整个任务费用断言为零或未知；工程约定不证明实际退款或执行状态。"
+        },
+        "steps": [
+          {
+            "name": "answer",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1772,
+              "output_tokens": 280,
+              "otari": {
+                "request_id": "8389b630-4654-41fd-aa2a-d45c02646040",
+                "role": "reflect",
+                "requested_model": "bridge-contest-reflect",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.001637",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-0bd909c95c8c4cb7b3b8206d97fd0253-answer",
+                "latency_ms": 6453,
+                "idempotent_replay": false
+              }
+            }
+          },
+          {
+            "name": "review",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1930,
+              "output_tokens": 17,
+              "otari": {
+                "request_id": "5985d65e-9277-4d0b-b7fa-c649dbfb260f",
+                "role": "review",
+                "requested_model": "alibaba/qwen-3.5-397b-a17b",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.000920",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-0bd909c95c8c4cb7b3b8206d97fd0253-review",
+                "latency_ms": 1328,
+                "idempotent_replay": false
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "phase": "unanswerable",
+      "task": {
+        "id": "4f2df310d8bc4626ad2887e605441eb3",
+        "query": "这些退款资料是否记载了我最喜欢的咖啡产地？",
+        "status": "completed",
+        "source_policy": "all",
+        "evidence_task_id": "878bb7f32c5f44e0ac2b685bb2990aa2",
+        "answer": {
+          "answer": "这些退款资料没有记载您最喜欢的咖啡产地。提供的资料仅涉及退款重试、幂等约定及业务键策略等技术规范，未包含任何关于个人咖啡偏好的信息。",
+          "citations": [],
+          "support": [],
+          "status": "insufficient_evidence"
+        },
+        "quality": {
+          "state": "approved",
+          "attempts": [
+            {
+              "candidate_step": "answer",
+              "approved": false,
+              "issues": [
+                "引用必须来自当前允许来源，且支持原句必须逐字存在；请重新生成。"
+              ]
+            },
+            {
+              "candidate_step": "answer_revision",
+              "approved": true,
+              "issues": []
+            }
+          ]
+        },
+        "error": null,
+        "run_facts": {
+          "scope": "completed_calls_before_initial_synthesis",
+          "completed_calls": 0,
+          "reported_subtotal_usd": null,
+          "unknown_cost_calls": 0,
+          "includes_whole_task_cost": false,
+          "interpretation": "没有已完成调用时，不能据此把整个任务费用断言为零或未知；工程约定不证明实际退款或执行状态。"
+        },
+        "steps": [
+          {
+            "name": "answer",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1799,
+              "output_tokens": 249,
+              "otari": {
+                "request_id": "cf5cd556-faab-4e45-a894-bac5f1a15e18",
+                "role": "reflect",
+                "requested_model": "bridge-contest-reflect",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.001557",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-4f2df310d8bc4626ad2887e605441eb3-answer",
+                "latency_ms": 8562,
+                "idempotent_replay": false
+              }
+            }
+          },
+          {
+            "name": "answer_revision",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1825,
+              "output_tokens": 72,
+              "otari": {
+                "request_id": "3e62acca-d8de-4e42-9ec9-959d834270c3",
+                "role": "reflect",
+                "requested_model": "bridge-contest-reflect",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.001037",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-4f2df310d8bc4626ad2887e605441eb3-answer_revision",
+                "latency_ms": 2844,
+                "idempotent_replay": false
+              }
+            }
+          },
+          {
+            "name": "review_revision",
+            "state": "completed",
+            "usage": {
+              "input_tokens": 1783,
+              "output_tokens": 17,
+              "otari": {
+                "request_id": "fdbe3e14-e80c-46f5-a45b-bb1a2cc439cb",
+                "role": "review",
+                "requested_model": "alibaba/qwen-3.5-397b-a17b",
+                "model": "Qwen/Qwen3.5-397B-A17B",
+                "provider": "deepinfra",
+                "fallback": false,
+                "attempt_count": 1,
+                "cost_usd": "0.000853",
+                "pricing_source": "deployment",
+                "operation_id": "bridge-4f2df310d8bc4626ad2887e605441eb3-review_revision",
+                "latency_ms": 2484,
+                "idempotent_replay": false
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "phase": "empty-remote-scope",
+      "task": {
+        "id": "3b3c7121795946ccbb5e55676f54dcb7",
+        "query": "只根据远程原文回答退款约定。",
+        "status": "completed",
+        "source_policy": "remote_only",
+        "evidence_task_id": "878bb7f32c5f44e0ac2b685bb2990aa2",
+        "answer": {
+          "status": "insufficient_evidence",
+          "answer": "没有足够的相关来源支持回答。",
+          "citations": [],
+          "support": []
+        },
+        "quality": null,
+        "error": null,
+        "run_facts": null,
+        "steps": []
+      }
+    }
+  ],
+  "browser_saved_source_boundary": {
+    "id": "7fb2f9e8580b41d49c0269a2fd1c76bc",
+    "query": "仅远程原文验收：退款约定是什么？",
+    "status": "completed",
+    "source_policy": "remote_only",
+    "evidence_task_id": "4f2df310d8bc4626ad2887e605441eb3",
+    "answer": {
+      "status": "insufficient_evidence",
+      "answer": "没有足够的相关来源支持回答。",
+      "citations": [],
+      "support": []
+    },
+    "quality": null,
+    "error": null,
+    "run_facts": null,
+    "steps": []
+  },
+  "review_evaluations": [
+    {
+      "id": "old-contradictory-polarity",
+      "task_id": "3383c290aa8442cba7632b83b4970440",
+      "expected_approved": false,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": false,
+        "issues": [
+          "回答存在逻辑矛盾：问题询问文档“是否含”真实记录，证据明确显示“不含”，正确答案应为“否”或“不含”，但候选回答以“是”开头，导致极性错误。",
+          "尽管引用的原文支持“不含真实记录”的事实，但开头的肯定词“是”直接否定了这一事实，构成自相矛盾。"
+        ]
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 2277,
+        "output_tokens": 100,
+        "otari": {
+          "request_id": "df4df5fd-30ba-49e5-86d9-f19eca169ef1",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.001325",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-old-contradictory-polarity-f79fc1b041ba45f29662a72981214168",
+          "latency_ms": 2610,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "old-policy-as-runtime",
+      "task_id": "59bdf42268bd44d5aa959a98666d7c26",
+      "expected_approved": false,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": false,
+        "issues": [
+          "候选答案声称“无法确认费用状态”，但 run_facts 明确指出“没有已完成调用时，不能据此把整个任务费用断言为零或未知”。在 completed_calls 为 0 的情况下，断言费用“无法确认”属于 unsupported conclusion，混淆了“无调用记录”与“费用状态未知”的概念。",
+          "候选答案对“综合前调用记录的范围”解释有误。该范围由 run_facts.scope 定义为“completed_calls_before_initial_synthesis”（初始合成前已完成的调用），而非答案中所述的“当前观察到的‘复用退款订单 ID’策略”。策略是工程规则，不是调用记录的范围定义。"
+        ]
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 1897,
+        "output_tokens": 162,
+        "otari": {
+          "request_id": "0e2d10a9-30ae-4610-b0f0-f2df5947172e",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.001340",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-old-policy-as-runtime-352e854eed7e4539b43e1755fec957c6",
+          "latency_ms": 3296,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "old-key-guarantee",
+      "task_id": "cd43491162b74ce38da527816ccd47e2",
+      "expected_approved": false,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": false,
+        "issues": [
+          "关于费用的断言 unsupported：候选答案称“本次调用记录中，费用与未知项因无法确认前次执行状态而被保留为未知”，这混淆了“业务执行状态的未知”与“调用费用的未知”。根据 run_facts，completed_calls 为 0 仅表示快照中无已完成调用，不能据此推断整个任务费用未知；且 run_usage 为空列表，并未显示任何因状态未确认而产生的费用记录。",
+          "因果逻辑错误：答案将“无法确认前次执行状态”作为“费用被保留为未知”的原因，但源文本中“无法确认的费用和执行状态必须保留为未知”是规范性规则，并非对本次调用记录实际发生情况的描述。现有证据未表明本次调用实际发生了费用确认失败的情况。"
+        ]
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 2299,
+        "output_tokens": 185,
+        "otari": {
+          "request_id": "3e36a33f-40af-45e3-b85b-086eb43fed88",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.001590",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-old-key-guarantee-57d37a697d7647659e2dc59114dac9bb",
+          "latency_ms": 8015,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "valid-abstention",
+      "task_id": "b99bf064d38846ac8147d571c9c43f73",
+      "expected_approved": true,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": true,
+        "issues": []
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 1645,
+        "output_tokens": 17,
+        "otari": {
+          "request_id": "5348f2c1-548a-4573-88fc-f08446bc2673",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.000791",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-valid-abstention-9aa98f0b185c4184817ab4e5538ccc66",
+          "latency_ms": 1734,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "correct-remote-negative",
+      "task_id": "6be6202128014c56a21190f62f78f6b7",
+      "expected_approved": true,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": true,
+        "issues": []
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 1146,
+        "output_tokens": 17,
+        "otari": {
+          "request_id": "1a068952-860c-4f42-99ef-f3252afe35c1",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.000567",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-correct-remote-negative-77f919959514475ab2e64cec87d2cb73",
+          "latency_ms": 1985,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "correct-business-boundary",
+      "task_id": "1e0ff179b0c4453aad5996dafc1ea190",
+      "expected_approved": true,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": true,
+        "issues": []
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 1848,
+        "output_tokens": 17,
+        "otari": {
+          "request_id": "29b90567-d59e-4419-84e1-42a04873c65c",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.000883",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-correct-business-boundary-2f6b7e90ed4946909ccdae7104266c04",
+          "latency_ms": 1594,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "isolated-key-overclaim",
+      "task_id": "878bb7f32c5f44e0ac2b685bb2990aa2",
+      "expected_approved": false,
+      "constructed_counterexample": true,
+      "result": {
+        "approved": false,
+        "issues": [
+          "答非所问：用户询问的是“退款服务开发偏好”，候选回答却陈述了一个关于幂等性保证的技术结论，未直接回答偏好内容。",
+          "过度推断/事实错误：来源明确指出“幂等性需要由业务状态、持久化约束和外部接口的明确契约共同保证”，而候选回答声称“只要复用退款订单 ID...不需要其他约束”，这与来源证据直接矛盾。",
+          "缺少引用：候选回答未引用用户明确表达偏好的原句（如 observations 中的“复用退款订单 ID"
+        ]
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 1925,
+        "output_tokens": 140,
+        "otari": {
+          "request_id": "f1a3f22a-853e-4c5d-a4ff-f349ce629dac",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.001286",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-isolated-key-overclaim-d3a0f2aa615349a0b0cb851f6714c276",
+          "latency_ms": 3016,
+          "idempotent_replay": false
+        }
+      }
+    },
+    {
+      "id": "irrelevant-support-for-absence",
+      "task_id": "faf1c95150b64b6db1b736cba807377f",
+      "expected_approved": false,
+      "constructed_counterexample": null,
+      "result": {
+        "approved": false,
+        "issues": [
+          "引用不相关：提供的两条引文分别关于“虚构工程约定”和“业务键策略”，均无法逻辑推导出“资料未记载咖啡产地”这一事实。虚构文档的声明不能证明其中不包含特定的虚构偏好信息。",
+          "结论 unsupported：答案断言“没有记载”属于对文档内容的具体事实陈述，但现有证据仅描述了文档的性质（虚构）和技术规则，并未列出文档包含或不包含的具体字段（如咖啡产地）。",
+          "正确处理应为 insufficient_evidence：由于证据中完全未提及咖啡产地或个人偏好，既不能证实也不能证伪该信息是否存在，应回答证据不足并留空引文，而非强行得出否定结论。"
+        ]
+      },
+      "passed": true,
+      "usage": {
+        "input_tokens": 1922,
+        "output_tokens": 168,
+        "otari": {
+          "request_id": "b75c653e-4e07-4bae-9edb-f625103cd435",
+          "role": "review",
+          "requested_model": "alibaba/qwen-3.5-397b-a17b",
+          "model": "Qwen/Qwen3.5-397B-A17B",
+          "provider": "deepinfra",
+          "fallback": false,
+          "attempt_count": 1,
+          "cost_usd": "0.001369",
+          "pricing_source": "deployment",
+          "operation_id": "bridge-review-eval-irrelevant-support-for-absence-04d2b8e0802045cfbe592c60c5c7a4d4",
+          "latency_ms": 6047,
+          "idempotent_replay": false
+        }
+      }
+    }
+  ],
+  "evaluation_version_note": "First seven classifications used the 397B prompt before the final citation-relevance paragraph. The eighth tests a newly observed false approval after that paragraph was added. These are staged current-target checks, not a single fixed-version benchmark or reliability estimate.",
+  "preserved_failures": [
+    {
+      "task_id": "92c230440c7d4aab916ebe46530eacd4",
+      "finding": "Nebius strict schema whitespace loop; output limit rejected; charged USD0.000502."
+    },
+    {
+      "task_id": "59bdf42268bd44d5aa959a98666d7c26",
+      "finding": "35B reviewer falsely approved policy-as-runtime claim."
+    },
+    {
+      "task_id": "b99bf064d38846ac8147d571c9c43f73",
+      "finding": "35B reviewer falsely rejected correct abstention; no final answer published."
+    },
+    {
+      "task_id": "faf1c95150b64b6db1b736cba807377f",
+      "finding": "397B reviewer falsely approved irrelevant citations for a preference-absence claim; final prompt rejects this saved candidate."
+    }
+  ],
+  "normal_route": "DeepInfra Qwen3.5-397B-A17B -> Nebius Qwen3-30B-A3B-Instruct-2507",
+  "cleanup": {
+    "mcp_still_closed": true,
+    "budget": "USD0.20 / Every provider / Never reset; spend never cleared"
+  }
+}

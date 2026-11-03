@@ -32,21 +32,26 @@
     "api_key_env": "OTARI_API_KEY",
     "models": {
       "extract": "alibaba/qwen-3.5-35b-a3b",
-      "reflect": "alibaba/qwen3-30b-a3b-instruct-2507",
+      "reflect": "alibaba/qwen-3.5-397b-a17b",
       "research": "alibaba/qwen3-30b-a3b-instruct-2507",
-      "analysis": "alibaba/qwen3-30b-a3b-instruct-2507"
+      "analysis": "alibaba/qwen3-30b-a3b-instruct-2507",
+      "review": "alibaba/qwen-3.5-397b-a17b"
     },
     "max_output_tokens": 2048,
     "reasoning_effort": {
       "extract": "none",
       "reflect": "none",
       "research": "none",
-      "analysis": "none"
+      "analysis": "none",
+      "review": "none"
     },
     "timeout_seconds": 60,
     "max_request_bytes": 524288,
     "max_response_bytes": 2097152,
     "max_tool_iterations": 5,
-    "tool_transport": "messages"
+    "tool_transport": "messages",
+    "response_modes": {
+      "reflect": "json_object"
+    }
   }
 }

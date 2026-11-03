@@ -2,7 +2,7 @@
 const {taskMetrics, filterTasks} = window.BridgeDashboard;
 const $ = id => document.getElementById(id);
 const statuses = {pending:'等待执行',running:'正在研究',completed:'已完成',paused:'已暂停',failed:'需要重新研究'};
-const names = {extract:'提取记忆',discover:'检索官方资料',mcp:'读取远程记忆',answer:'综合有据回答',analyze:'分析调用记录'};
+const names = {extract:'提取记忆',discover:'检索官方资料',mcp:'读取远程记忆',answer:'生成候选回答',review:'核对候选依据',answer_revision:'修订候选回答',review_revision:'复核修订回答',analyze:'分析调用记录'};
 let selected = null, current = null, generation = 0, timer = null, busy = false, taskFilter = 'all', savedTasks = [];
 const node = (tag, text, cls) => { const el = document.createElement(tag); if(text !== undefined) el.textContent = text; if(cls) el.className = cls; return el; };
 async function api(path, options={}) { const res = await fetch(path, {...options, headers:{'Content-Type':'application/json',...options.headers}}); const data = await res.json(); if(!res.ok) throw new Error(data.error || '请求未完成，请重试。'); return data; }
@@ -29,11 +29,14 @@ function metrics(task) {
 function render(task) {
   current=task; $('main').classList.add('reading'); $('result').hidden=false; $('result-title').textContent=task.query;
   metrics(task);
-  $('task-status').textContent=statuses[task.status]||task.status; $('task-status').dataset.status=task.status;
+  $('task-status').textContent=task.status==='completed'&&task.answer?.status==='insufficient_evidence'?'证据不足':statuses[task.status]||task.status; $('task-status').dataset.status=task.status;
   $('task-time').textContent='创建于 '+new Date(task.created_at).toLocaleString('zh-CN');
+  $('quality-status').hidden=!task.review_required;$('quality-status').textContent=task.status==='completed'&&!task.steps.length&&task.answer?.status==='insufficient_evidence'?'没有选定来源，未调用模型。':task.quality?.state==='approved'?`精确引用与语义核对通过 · ${task.quality.attempts.length} 次候选`:task.quality?.state==='rejected'?'候选未通过核对，未发布回答。':'候选通过核对后才会发布。';
+  $('reuse-sources').disabled=task.status!=='completed'||!task.sources.length;
+  const snapshot=task.answer_context?.run_facts;$('accounting-snapshot').hidden=!snapshot;$('accounting-snapshot').textContent=snapshot?`综合前快照：${snapshot.completed_calls} 次已完成调用。不含本次综合、核对及后续分析；当前已报告费用见调用账本。`:'';
   $('resume').hidden=!['paused','running','pending'].includes(task.status); $('resume').disabled=busy||!task.can_resume;
   $('task-error').hidden=!task.error; $('task-error').textContent=task.error?task.error.message+' ('+task.error.kind+')':'';
-  $('answer').textContent=task.answer?.answer||(task.status==='running'?'正在检索与核对。已完成的步骤会持续保存。':'任务结果将在这里显示。');
+  $('answer').textContent=task.answer?.status==='insufficient_evidence'?'当前选定来源不足以支持回答。':task.answer?.answer||(task.status==='running'?'正在检索与核对。已完成的步骤会持续保存。':'任务结果将在这里显示。');
   $('citations').replaceChildren(); for(const [i,cite] of (task.answer?.citations||[]).entries()){const b=node('button',`[${i+1}] `+(task.sources.find(s=>s.permalink===cite)?.title||cite),'citation');b.onclick=()=>inspect(cite);$('citations').append(b);}
   $('sources-empty').hidden=!!task.sources.length; $('evidence-count').textContent=String(task.sources.length);$('sources').replaceChildren();
   for(const source of task.sources){ const d=node('details',undefined,'source');d.dataset.citation=source.permalink;const summary=node('summary',source.title);summary.tabIndex=0;summary.append(node('small',(source.kind==='official_web'?'官方网页 · 版本 '+source.revision:source.kind==='remote_mcp'?'远程原文 · 版本 '+source.revision:'记忆原文')+' · '+source.permalink));d.append(summary);
@@ -44,6 +47,7 @@ function render(task) {
   $('timeline').replaceChildren();$('ledger').replaceChildren();
   for(const step of task.steps){const result=step.result, meta=result?.usage?.otari||{};const item=node('li');item.append(node('strong',names[step.name]||step.name),node('p',step.state==='completed'?'已保存结果':'请求已准备，等待完成','muted'));
     if(meta.request_id)item.append(node('p',meta.request_id,'muted'));
+    if(step.arguments.role==='review'&&result?.value){item.append(node('p',result.value.approved?'审查通过':'需要修订'));for(const issue of result.value.issues||[])item.append(node('p',issue));}
     for(const tool of result?.tool_calls||[]){const details=node('details');details.append(node('summary',`${tool.type||'tool'} · ${tool.status||'未知'}`),node('pre',JSON.stringify(tool,null,2)));item.append(details);} $('timeline').append(item);
     if(!result)continue; const tr=node('tr'), label=node('td',names[step.name]||step.name);label.append(node('small',meta.request_id||'请求编号未报告'));tr.append(label,node('td',meta.model||'未报告'),node('td',`${result.usage.input_tokens??'?'} / ${result.usage.output_tokens??'?'}`),node('td',meta.cost_usd==null?'未知':'$'+meta.cost_usd),node('td',meta.fallback===true?'是':meta.fallback===false?'否':'未知'));$('ledger').append(tr);
   }
@@ -57,10 +61,11 @@ async function history(){savedTasks=await api('/api/tasks');renderHistory();}
 for(const button of document.querySelectorAll('[data-filter]'))button.onclick=()=>{taskFilter=button.dataset.filter;for(const b of document.querySelectorAll('[data-filter]'))b.setAttribute('aria-pressed',String(b===button));renderHistory();};
 async function open(id){selected=id;const version=++generation;clearTimeout(timer);try{const task=await api('/api/tasks/'+id);if(version!==generation)return;render(task);await history();if(['running','pending'].includes(task.status))timer=setTimeout(()=>poll(id,version),1200);}catch(e){message(e.message);} }
 async function poll(id,version){if(version!==generation||selected!==id)return;try{const task=await api('/api/tasks/'+id);if(version!==generation)return;render(task);if(['running','pending'].includes(task.status))timer=setTimeout(()=>poll(id,version),1200);else await history();}catch(e){message(e.message);} }
-$('research-form').onsubmit=async event=>{event.preventDefault();if(busy)return;message('');busy=true;$('submit').disabled=true;$('submit-label').textContent='正在创建…';try{const payload={query:$('question').value,web:$('web').checked,analyze:$('analyze').checked,mcp:$('mcp').checked};if($('scope').value.trim())payload.scope=$('scope').value.trim();if($('conversation').value.trim())payload.event={user:$('conversation').value,final:''};const task=await api('/api/tasks',{method:'POST',body:JSON.stringify(payload)});await open(task.id);}catch(e){message(e.message);}finally{busy=false;$('submit').disabled=false;$('submit-label').textContent='开始研究';} };
+$('research-form').onsubmit=async event=>{event.preventDefault();if(busy)return;message('');busy=true;$('submit').disabled=true;$('submit-label').textContent='正在创建…';try{const payload={query:$('question').value,web:$('web').checked,analyze:$('analyze').checked,mcp:$('mcp').checked,source_policy:$('source-policy').value};if($('evidence-task').value)payload.evidence_task_id=$('evidence-task').value;if($('scope').value.trim())payload.scope=$('scope').value.trim();if($('conversation').value.trim())payload.event={user:$('conversation').value,final:''};const task=await api('/api/tasks',{method:'POST',body:JSON.stringify(payload)});await open(task.id);}catch(e){message(e.message);}finally{busy=false;$('submit').disabled=false;$('submit-label').textContent='开始研究';} };
 $('resume').onclick=async()=>{if(busy||!selected)return;busy=true;$('resume').disabled=true;try{await api('/api/tasks/'+selected+'/resume',{method:'POST'});await open(selected);}catch(e){message(e.message);}finally{busy=false;$('resume').disabled=false;}};
 $('refresh').onclick=()=>history().catch(e=>message(e.message));
-$('new-task').onclick=()=>{selected=null;current=null;generation++;clearTimeout(timer);$('main').classList.remove('reading');$('result').hidden=true;$('sources').replaceChildren();$('timeline').replaceChildren();$('evidence-count').textContent='0';$('sources-empty').hidden=false;$('research-form').reset();metrics(null);message('');history().catch(e=>message(e.message));$('question').focus();};
+$('new-task').onclick=()=>{selected=null;current=null;generation++;clearTimeout(timer);$('main').classList.remove('reading');$('result').hidden=true;$('sources').replaceChildren();$('timeline').replaceChildren();$('evidence-count').textContent='0';$('sources-empty').hidden=false;$('research-form').reset();$('evidence-task').value='';$('reuse-note').hidden=true;$('conversation').disabled=false;$('scope').disabled=false;metrics(null);message('');history().catch(e=>message(e.message));$('question').focus();};
+$('reuse-sources').onclick=()=>{if(!current||current.status!=='completed')return;const previous=current;$('new-task').onclick();$('question').value=previous.query;$('evidence-task').value=previous.id;$('source-policy').value=previous.source_policy||'all';$('reuse-note').textContent='沿用此任务已保存的来源，不重新采集；可修改问题和引用范围。';$('reuse-note').hidden=false;$('conversation').disabled=true;$('scope').value=previous.scope||'';$('scope').disabled=true;};
 $('example').onclick=()=>{$('question').value='退款任务重试时，怎样确保只产生一次业务效果？';$('conversation').value='退款请求可能重复传输，但必须保持幂等；同一退款业务只能产生一次实际退款效果。';$('conversation').closest('details').open=true;$('web').checked=false;$('analyze').checked=false;$('question').focus();};
 $('scene-web').onclick=()=>{$('question').value='functools.lru_cache 能保证并发时底层函数只执行一次吗？请核对 Python 官方文档并说明边界。';$('conversation').value='';$('web').checked=true;$('analyze').checked=false;$('question').focus();};
 $('scene-analysis').onclick=()=>{$('question').value='结合退款重试的幂等约定回答，并分析本次模型调用记录、费用报告和未知项。';$('conversation').value='';$('web').checked=false;$('analyze').checked=true;$('question').focus();};
