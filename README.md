@@ -6,6 +6,12 @@
 
 Context Bridge builds resumable task handoffs and evidence-backed personal memory on top of an existing Basic Memory installation. Codex and Claude Code share the same Markdown knowledge base, MCP bridge and background listener.
 
+本分支新增 **Otari 记忆研究台**：对话提取、官方资料核对、精确引用、调用账本、
+代码分析与中断恢复，以及受发布名单限制的只读 HTTP MCP。
+见[独立启动与使用指南](docs/OTARI_GUIDE.md)、[TODO 与阶段证据](docs/OTARI_TODO.md)
+和[真人演示/提交材料](docs/OTARI_SUBMISSION.md)。代码与本地契约已完成；真实托管
+验收待配置密钥后进行，当前不宣称比赛得分。
+
 项目在既有 Basic Memory `main` 上增强检索、事实历史、知识页和任务连续性。Markdown 是权威知识源；SQLite、向量及派生页用于索引和缓存。后台复用原 `EngineeringMemoryListener`，前台通过现有 MCP 和提示 Hook 接入两客户端。
 
 项目支持 **Codex 和 Claude Code**。截至 **2026-10-13**，本地部署完成，最终 **87 项功能回归通过**；两端实际 MCP 配置、30 秒 Hook、checkpoint 恢复和原监听任务的真实到期删除已经验收。Claude 原生模型验收时，其模型渠道返回 **503**，该次调用未得到成功结果；这是渠道服务可用性问题。具体证据见[完整验收记录](docs/checkpoint-lifecycle验收.md)和[结构化证据](docs/checkpoint-部署端到端验收.json)。

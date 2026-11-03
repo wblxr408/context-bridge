@@ -62,6 +62,8 @@ class ResearchWorkflow:
             raise ValueError('Question must contain 1–4000 characters')
         if scope is not None and (not isinstance(scope, str) or len(scope) > 1000):
             raise ValueError('Invalid memory scope')
+        if any(not isinstance(flag, bool) for flag in (web, analyze, mcp)):
+            raise ValueError('Tool choices must be booleans')
         if event is not None and (not isinstance(event, dict) or
                 any(not isinstance(event.get(k, ''), str) for k in ('user', 'final')) or
                 len(event.get('user', '') + event.get('final', '')) > 50000):
@@ -71,7 +73,8 @@ class ResearchWorkflow:
             'max_request_bytes', 'max_response_bytes', 'max_tool_iterations', 'allow_loopback_http'}}
         task = {'id': uuid4().hex, 'query': query.strip(), 'scope': scope,
                 'web': bool(web), 'analyze': bool(analyze), 'mcp': bool(mcp),
-                'event': event, 'created_at': now(), 'updated_at': now(),
+                'event': ({'user': event.get('user', ''), 'final': event.get('final', '')} if event else None),
+                'created_at': now(), 'updated_at': now(),
                 'gateway': gateway, 'domains': list(self.config.get('research', {}).get('official_domains', [])),
                 'mcp_server_ids': list(self.config.get('research', {}).get('mcp_server_ids', [])),
                 'status': 'pending', 'steps': [], 'sources': [], 'source_warnings': [], 'answer': None}
@@ -82,10 +85,12 @@ class ResearchWorkflow:
 
     def get(self, task_id):
         with self.memory.lock:
-            row = self.memory.db.execute('SELECT body FROM otari_tasks WHERE id=?', (task_id,)).fetchone()
+            row = self.memory.db.execute('SELECT body,lease_until FROM otari_tasks WHERE id=?', (task_id,)).fetchone()
         if not row:
             raise KeyError('Unknown task')
-        return json.loads(row[0])
+        task = json.loads(row[0])
+        task['can_resume'] = task['status'] in {'pending', 'paused'} or (task['status'] == 'running' and row[1] < time.time())
+        return task
 
     def list(self, limit=30):
         with self.memory.lock:
@@ -112,11 +117,16 @@ class ResearchWorkflow:
             with self.memory.lock:
                 settle_call(self.memory.db, step['call_id'], step['result']['usage'])
             return step['result']
+        if step.get('dispatched_at') and time.time() - step['dispatched_at'] > 23 * 3600:
+            raise GatewayError('replay_expired', '该请求的安全重放窗口已结束。请先在 Otari 活动记录中核对原请求；本任务不会自动重新计费。')
         if not step.get('call_id'):
             with self.memory.lock:
                 step['call_id'] = reserve_call(self.memory.db, self.config,
-                    len(json.dumps(step['messages'], ensure_ascii=False)) + 2000)
+                    len(json.dumps(step['messages'], ensure_ascii=False)) + 2000,
+                    operation_id=step['arguments']['operation_id'])
             self._save(task)
+        step.setdefault('dispatched_at', time.time())
+        self._save(task)
         try:
             reply = self.gateway_factory({'otari': task['gateway']}).complete(step['messages'], **step['arguments'])
         except Exception as exc:
@@ -125,6 +135,7 @@ class ResearchWorkflow:
             if not getattr(exc, 'dispatched', True) or getattr(exc, 'kind', '') in {
                     'budget_exceeded', 'authentication', 'permission_denied', 'rate_limited'}:
                 step.pop('call_id', None)
+                step.pop('dispatched_at', None)
             self._save(task)
             raise
         step['result'] = {'content': reply.content, 'value': reply.value,
@@ -184,7 +195,7 @@ class ResearchWorkflow:
             task['status'] = 'completed'
         except (BudgetExceeded, GatewayError) as exc:
             kind = getattr(exc, 'kind', 'budget_exceeded')
-            task['status'] = 'paused' if kind in {'budget_exceeded', 'transport_error', 'rate_limited', 'gateway_error', 'configuration', 'authentication', 'permission_denied'} else 'failed'
+            task['status'] = 'paused' if kind in {'budget_exceeded', 'transport_error', 'rate_limited', 'gateway_error', 'configuration', 'authentication', 'permission_denied', 'replay_expired'} else 'failed'
             task['error'] = {'kind': kind, 'message': str(exc), 'request_id': getattr(exc, 'request_id', None)}
         except ValueError:
             task['status'], task['error'] = 'failed', {'kind': 'invalid_evidence', 'message': '模型结果缺少可核对的原文支持；请查看来源后创建新任务。'}
@@ -245,6 +256,25 @@ class ResearchWorkflow:
                 {'role': 'user', 'content': task['query']}], role='research', mcp_server_ids=task['mcp_server_ids'])
             records = [t for t in result['tool_calls'] if t.get('type') == 'mcp']
             task['mcp_evidence'] = {'verified': any(t.get('status') == 'completed' for t in records), 'calls': records}
+            # A successful tool declaration alone is not answer evidence. Only a
+            # complete read_source output becomes an immutable task snapshot.
+            for record in records[:10]:
+                if record.get('name') != 'read_source' or record.get('status') != 'completed' or record.get('truncated'):
+                    continue
+                try:
+                    source = json.loads(record.get('output', ''))
+                    if 'structuredContent' in source:
+                        source = source['structuredContent']
+                    if not isinstance(source, dict) or any(not isinstance(source.get(k), str) or not source[k].strip()
+                            for k in ('citation', 'title', 'text', 'revision')) or len(source['text']) > 60000:
+                        continue
+                    citation = 'remote/' + str(record.get('server', 'memory'))[:100] + '/' + source['citation'][:500] + '@' + source['revision'][:100]
+                    if not any(s['permalink'] == citation for s in task['sources']):
+                        task['sources'].append({'permalink': citation, 'title': source['title'][:300],
+                            'excerpt': source['text'], 'revision': source['revision'], 'kind': 'remote_mcp',
+                            'retrieved_at': now(), 'server': record.get('server')})
+                except (ValueError, TypeError, KeyError):
+                    continue
             self._save(task)
         if not task.get('answer'):
             if not task['sources'] and not task.get('observations'):

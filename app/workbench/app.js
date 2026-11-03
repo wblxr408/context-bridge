@@ -13,7 +13,7 @@ function render(task) {
   current=task; $('main').classList.add('reading'); $('result').hidden=false; $('result-title').textContent=task.query;
   $('task-status').textContent=statuses[task.status]||task.status; $('task-status').dataset.status=task.status;
   $('task-time').textContent='创建于 '+new Date(task.created_at).toLocaleString('zh-CN');
-  $('resume').hidden=!['paused','running','pending'].includes(task.status); $('resume').disabled=busy||task.status==='running';
+  $('resume').hidden=!['paused','running','pending'].includes(task.status); $('resume').disabled=busy||!task.can_resume;
   $('task-error').hidden=!task.error; $('task-error').textContent=task.error?task.error.message+' ('+task.error.kind+')':'';
   $('answer').textContent=task.answer?.answer||(task.status==='running'?'正在检索与核对。已完成的步骤会持续保存。':'任务结果将在这里显示。');
   $('citations').replaceChildren(); for(const [i,cite] of (task.answer?.citations||[]).entries()){const b=node('button',`[${i+1}] `+(task.sources.find(s=>s.permalink===cite)?.title||cite),'citation');b.onclick=()=>inspect(cite);$('citations').append(b);}

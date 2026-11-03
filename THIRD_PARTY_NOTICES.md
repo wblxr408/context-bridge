@@ -1,5 +1,10 @@
 # Third-party notices
 
+`app/workbench/BridgeDisplay.ttf` is the Fraunces variable font from
+https://github.com/google/fonts/tree/main/ofl/fraunces, distributed under the
+SIL Open Font License 1.1. Copyright and license are retained in
+`docs/FRAUNCES-OFL.txt`. No font design modifications were made.
+
 `app/vendor/watchdog` contains watchdog 6.0.0, distributed under Apache License 2.0.
 Original license, copyright and author files are retained in
 `app/vendor/watchdog-6.0.0.dist-info/`.

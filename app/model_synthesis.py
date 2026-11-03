@@ -42,17 +42,32 @@ def settle_call(db, call, usage=None, error=None):
             db.execute('INSERT OR REPLACE INTO memory_gateway_calls VALUES(?,?,?)',
                        (call, 'failed' if error else 'succeeded', json.dumps(record)))
 
-def reserve_call(db,config,estimate=None):
+def reserve_call(db,config,estimate=None,operation_id=None):
     now=time.time()
     reserve=max(config.get('reserve_tokens_per_call',12000),estimate or 0)
     with db:
         db.execute('BEGIN IMMEDIATE')
         db.execute('CREATE TABLE IF NOT EXISTS calls(id INTEGER PRIMARY KEY,started REAL,tokens INTEGER DEFAULT 0)')
-        used=db.execute('SELECT count(*),coalesce(sum(tokens),0) FROM calls WHERE started>?',(now-86400,)).fetchone()
-        hourly=db.execute('SELECT count(*) FROM calls WHERE started>?',(now-3600,)).fetchone()[0]
+        db.execute('CREATE TABLE IF NOT EXISTS memory_model_operations(operation_id TEXT PRIMARY KEY,call_id INTEGER NOT NULL)')
+        prior = db.execute('SELECT calls.id,calls.tokens FROM memory_model_operations JOIN calls ON calls.id=call_id WHERE operation_id=?',
+                           (operation_id,)).fetchone() if operation_id else None
+        # An ambiguous dispatch already owns its reservation, even if the task
+        # journal was interrupted before storing call_id. Both bindings commit
+        # in this transaction rather than relying on an in-memory assignment.
+        if prior and prior[1] > 0:
+            return prior[0]
+        old_id = prior[0] if prior else -1
+        used=db.execute('SELECT count(*),coalesce(sum(tokens),0) FROM calls WHERE started>? AND id!=?',(now-86400,old_id)).fetchone()
+        hourly=db.execute('SELECT count(*) FROM calls WHERE started>? AND id!=?',(now-3600,old_id)).fetchone()[0]
         if used[0]>=config['max_calls_per_day'] or hourly>=config['max_calls_per_hour'] or used[1]+reserve>config['max_tokens_per_day']:
             raise BudgetExceeded('Existing shared memory model budget exhausted; use evidence-only recall or cached pages')
-        return db.execute('INSERT INTO calls(started,tokens) VALUES(?,?)',(now,reserve)).lastrowid
+        if prior:
+            db.execute('UPDATE calls SET started=?,tokens=? WHERE id=?', (now,reserve,old_id))
+            return old_id
+        call = db.execute('INSERT INTO calls(started,tokens) VALUES(?,?)',(now,reserve)).lastrowid
+        if operation_id:
+            db.execute('INSERT INTO memory_model_operations VALUES(?,?)',(operation_id,call))
+        return call
 
 def generator_from_config(config,home,memory):
     def generate(evidence):

@@ -22,12 +22,14 @@ This is ordinary task documentation; no new OpenSpec change is being created.
   memory writes are excluded from this remote tool loop.
 - [x] F. Local workbench: task/answer, inspectable sources, timeline/model/tool/cost
   evidence, loading/empty/error/budget states and resume; accessible responsive UI.
-- [ ] G. Focused behavior acceptance: latest correction, absent evidence, changed web
+- [x] G. Focused behavior acceptance: latest correction, absent evidence, changed web
   sources, fallback, budget refusal, malformed output, interruption/resume and MCP bounds.
-- [ ] H. Delivery: reproducible setup, example configuration without secrets, demo data,
+- [x] H. Delivery: reproducible setup, example configuration without secrets, demo data,
   rubric evidence map, participant-recorded 3–5 minute demo outline and written feedback.
 - [ ] I. Hosted acceptance: real requests for both model roles, web/code/MCP, actual
   routing and budget behavior; record remaining unverified items honestly.
+  Deferred explicitly by the user on 2026-11-03: finish code/materials first;
+  configure the API credential later. No hosted success or score is claimed.
 
 ## Stages and evidence
 
@@ -74,7 +76,18 @@ workbench and a separate authenticated MCP-only HTTP app, using the official MCP
 SDK 2.2 transport. Both bind loopback by default. Remote publication additionally
 requires an exact scope and explicit permalink allowlist; it cannot invoke models
 or write memory. External HTTPS reachability has not been deployed or verified.
-Next: current-change edge cases, setup/demo/submission material, hosted acceptance.
+Stage 3 was committed and pushed as `7615ac1`. Stage 4 closes current-change recovery
+and evidence gaps and delivers [setup](OTARI_GUIDE.md), [demo/submission material](OTARI_SUBMISSION.md)
+and fictional [demo data](demo/conversations.json). The user's latest instruction is
+to complete code/materials and defer credential configuration. Implementation is
+local in `D:/context-bridge-otari`; installed listeners and `D:/ContextRail` are untouched.
+
+Continuation after credentials: select two actually available open-weight models,
+run the fictional demo through hosted Otari, verify real web/code/routing/spending
+behavior, then authorize/publish only the curated HTTPS MCP surface and validate it
+through Otari. Record actual request IDs and costs; obtain organizer eligibility /
+deadline-timezone confirmation and participant-recorded videos before submission.
+Do not infer hosted success from these tests or automatically send submission mail.
 
 ## Sources
 
@@ -115,3 +128,18 @@ Desktop screenshot: `%TEMP%/bridge-workbench-desktop.jpg`; mobile screenshot:
 `%TEMP%/bridge-workbench-mobile.jpg`. Fraunces font is bundled under its OFL license.
 On this Windows host fixed ports 8765 and 49723 returned bind error 10013; an
 OS-assigned port worked for the browser journey. Use a permitted port when launching.
+
+Stage 4: four delivery contracts found two real gaps (remote reads were logged but
+not used in answers, and abandoned leases had no UI resume signal). Both fixed;
+all four pass, also covering latest explicit correction and one retained memory event
+after interruption during derived-page publication. Four additional boundary cases
+failed on malformed-output charge metadata, expired replay, missing operation-level
+reservation binding and string tool flags. All four pass after fixes. Prepared
+requests over 23 hours old stop for reconciliation; transactionally bound operation
+IDs prevent a second reservation across a task-journal gap. Current-change coverage
+totals 30 passing cases across the staged runs, not a fresh run of unchanged suites.
+No legacy regression, startup/import probes, checksum comparisons or smoke checks run.
+
+Hosted phase remains outstanding by explicit user choice. Demo/submission descriptions
+and written feedback are reviewable drafts; real-use details and participant videos
+must be filled after hosted acceptance. No competition submission was sent.

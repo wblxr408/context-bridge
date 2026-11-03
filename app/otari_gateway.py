@@ -167,6 +167,8 @@ class GatewayClient:
                                                           'requested_model': model, 'cost_usd': None}) from None
         if len(raw) > self.max_bytes:
             raise GatewayError('invalid_output', 'Otari response exceeds the configured byte limit', dispatched=True)
+        metadata = {'request_id': headers.get('Otari-Request-ID'), 'operation_id': operation_id,
+                    'role': role, 'requested_model': model, 'cost_usd': None}
         try:
             result = json.loads(raw)
             message = result['choices'][0]['message']
@@ -192,7 +194,8 @@ class GatewayClient:
             raise
         except (KeyError, IndexError, TypeError, ValueError, UnicodeError):
             raise GatewayError('invalid_output', 'Otari returned an incomplete or invalid model result',
-                               request_id=headers.get('Otari-Request-ID'), dispatched=True) from None
+                               request_id=headers.get('Otari-Request-ID'), dispatched=True,
+                               metadata=metadata) from None
         return GatewayReply(content, value, normalized, tuple(tool_calls))
 
 

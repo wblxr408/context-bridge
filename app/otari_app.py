@@ -33,10 +33,10 @@ def main():
             import uvicorn
             if args.mode == 'mcp':
                 from otari_mcp import create_mcp_app
-                application, port = create_mcp_app(memory, config), args.port or 8766
+                application, port = create_mcp_app(memory, config), args.port if args.port is not None else 8766
             else:
                 from otari_workbench import create_app
-                application, port = create_app(ResearchWorkflow(memory, config)), args.port or 8765
+                application, port = create_app(ResearchWorkflow(memory, config)), args.port if args.port is not None else 8765
             uvicorn.run(application, host='127.0.0.1', port=port, access_log=False)
     finally:
         memory.close()
