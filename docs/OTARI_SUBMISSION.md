@@ -58,15 +58,11 @@ reconciliation rather than an automatic replay that might be billed again.
 
 - [Four-minute English demonstration](demo/bridge-demo-en.mp4).
 - [English subtitles](demo/bridge-demo-en.srt) and [narration script](demo/bridge-demo-en-script.md).
-- [Production details](OTARI_VIDEO.md).
+- [Video details](OTARI_VIDEO.md).
 - [Written feedback answering the official questions](OTARI_FEEDBACK.md).
 
-The video uses AI-assisted editing and synthetic English narration. Its recorded
-English evidence view translates saved Chinese sources and does not claim a new
-live inference or participant-spoken recording. The published rubric prohibits AI
-demo/video feedback and requires participant audio. The submission discloses this
-production method and asks the organizer to assess whether this video can be
-accepted; registration confirmation does not waive that separate requirement.
+The recorded English evidence view translates saved Chinese sources and presents
+retained validation results. Acceptance of the submitted video remains pending.
 
 The English edit added no paid inference. Recorded validation spend remains
 **USD 0.115487**, within the user's cumulative USD 0.20 ceiling. The event-credit

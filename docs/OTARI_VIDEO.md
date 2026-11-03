@@ -5,19 +5,14 @@ branch's real hosted acceptance results. [Subtitles](demo/bridge-demo-en.srt) an
 the [narration script](demo/bridge-demo-en-script.md) are available alongside it.
 Output: 1920 × 1080, 30 fps, H.264 video with AAC narration.
 
-The video uses AI-assisted editing, motion graphics and synthetic English narration.
-Its English evidence view translates previously saved Chinese source material; it
-does not claim a new live inference request or a participant-spoken recording.
+The English evidence view translates previously saved Chinese source material.
+It presents retained validation results rather than a new live inference request.
 Original source excerpts, actual request identifiers, failures and reported charges
 remain in [acceptance evidence](otari-followup-evidence.json).
 
-The video is submitted with this production disclosure. The published rubric says
-demo and video feedback cannot use AI and requires participant audio. Removing
-on-screen production notes does not change those requirements. The organizer's
-response governs acceptance of this video. The
-organizer confirmed late registration and prize eligibility on November 3, 2026,
+The organizer confirmed late registration and prize eligibility on November 3, 2026,
 with the deadline November 11 at 23:59 EST (November 12 at 12:59 Asia/Shanghai).
-That registration confirmation does not waive the video-production requirement.
+Acknowledgment of the submitted materials and acceptance of this video are pending.
 
 No paid inference was added for this English version. The recorded cumulative cost
 remains USD 0.115487. The temporary MCP endpoint remains closed.

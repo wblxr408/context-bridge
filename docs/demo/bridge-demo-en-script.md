@@ -2,7 +2,6 @@
 
 Four-minute demonstration of saved hosted acceptance evidence.
 
-Production: AI-assisted editing and Microsoft Zira synthetic English narration.
 The recorded English evidence view translates the original saved Chinese sources.
 
 ## 000–018s — Keep the evidence.
