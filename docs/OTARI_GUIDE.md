@@ -4,8 +4,11 @@
 官方资料核对 → 引用回答 → 调用账本与代码分析 → 中断后继续。
 它使用已有 Python、Markdown 记忆库和 SQLite，不安装第二个长期记忆服务。
 
-**当前状态：代码和本地行为验收已完成；真实托管验收按用户 2026-11-03 的决定
-延后至配置密钥之后。当前不能声称已达到某个比赛分数或已取得奖金资格。**
+**当前状态：代码和本地行为验收已完成；本机凭据已配置并成功读取托管模型目录。
+真实模型推理、工具、路由和花费限额验收仍未完成。当前不能声称已达到某个比赛分数或已取得奖金资格。**
+
+工作台已按用户指定的 Maple Ridge House 适配为暖奶油色浮雕界面，采用 Poppins /
+Roboto Mono、卡片任务网格和右侧实际状态仪表。映射与验收见 [设计说明](OTARI_DESIGN.md)。
 
 比赛分支：[`codex/otari-devs-wilding`](https://github.com/wblxr408/context-bridge/tree/codex/otari-devs-wilding)。
 首次引入 Otari 的提交：[`2177c03`](https://github.com/wblxr408/context-bridge/commit/2177c03)。

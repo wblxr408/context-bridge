@@ -143,3 +143,12 @@ No legacy regression, startup/import probes, checksum comparisons or smoke check
 Hosted phase remains outstanding by explicit user choice. Demo/submission descriptions
 and written feedback are reviewable drafts; real-use details and participant videos
 must be filled after hosted acceptance. No competition submission was sent.
+
+2026-11-03 follow-up: user supplied the Maple Ridge House design reference and
+authorized local encrypted credential storage. The workbench now uses its cream/
+taupe soft-UI, Poppins/Roboto Mono, task grid, segmented history filters and actual
+task/accounting indicators; see [design and acceptance](OTARI_DESIGN.md). Four new
+dashboard contracts pass; old suites were not rerun. User credential is stored outside
+the repository with Windows user DPAPI, injected only into the launched process by
+an ignored local launcher. Authenticated model-catalog retrieval returned 159 entries.
+This resolves credential setup, not hosted inference/tool/routing/budget acceptance.

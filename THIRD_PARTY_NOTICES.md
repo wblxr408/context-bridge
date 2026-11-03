@@ -1,5 +1,11 @@
 # Third-party notices
 
+The current competition workbench uses Poppins and Roboto Mono from Google Fonts,
+redistributed under SIL Open Font License 1.1. Original licenses and copyrights
+are retained in `docs/POPPINS-OFL.txt` and `docs/ROBOTO-MONO-OFL.txt`.
+Sources: https://github.com/google/fonts/tree/main/ofl/poppins and
+https://github.com/google/fonts/tree/main/ofl/robotomono. No font design changes.
+
 `app/workbench/BridgeDisplay.ttf` is the Fraunces variable font from
 https://github.com/google/fonts/tree/main/ofl/fraunces, distributed under the
 SIL Open Font License 1.1. Copyright and license are retained in

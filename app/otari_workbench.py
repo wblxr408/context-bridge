@@ -93,7 +93,8 @@ def create_app(workflow):
 
     async def asset(request):
         name = request.path_params.get('name', 'index.html')
-        if name not in {'index.html', 'app.css', 'app.js', 'BridgeDisplay.ttf'}:
+        if name not in {'index.html', 'app.css', 'app.js', 'dashboard-data.js', 'BridgeDisplay.ttf',
+                        'Poppins-Regular.ttf', 'Poppins-SemiBold.ttf', 'RobotoMono.ttf'}:
             return JSONResponse({'error': 'Not found'}, 404)
         return FileResponse(ASSETS / name)
 
