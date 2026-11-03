@@ -206,6 +206,13 @@ def resolve_codex():
 
 
 def judge(config, home, payload, existing, schema=None, instructions=None):
+    if config.get('model_backend', 'codex') == 'otari':
+        from otari_gateway import judge as gateway_judge
+        return gateway_judge(config, payload, existing,
+                             schema or HERE/'judge-schema.json',
+                             instructions or HERE/'judge-instructions.txt')
+    if config.get('model_backend', 'codex') != 'codex':
+        raise ValueError('Unknown memory model backend')
     run = Path(home) / 'judge'
     run.mkdir(exist_ok=True)
     result_file = run / 'result.json'
@@ -399,7 +406,7 @@ class Service:
         db=self.store.db; now=time.time()
         job=db.execute("SELECT * FROM jobs WHERE state IN ('queued','retry','ready_to_save','awaiting_index') AND available<=? ORDER BY (state='awaiting_index') DESC,(state='ready_to_save') DESC,created LIMIT 1",(now,)).fetchone()
         if not job: return
-        jid=job['id']; payload=json.loads(job['payload'])
+        jid=job['id']; payload=json.loads(job['payload']);callid=None
         try:
             if job['state']=='awaiting_index':
                 verify_files(self.config,json.loads(job['files']))
@@ -414,7 +421,7 @@ class Service:
                     db.execute('UPDATE jobs SET state=?,files=?,available=?,error=NULL WHERE id=?',
                         ('awaiting_index' if files else 'skipped',json.dumps(files),time.time()+10,jid))
                 return
-            from model_synthesis import reserve_call,BudgetExceeded
+            from model_synthesis import reserve_call,settle_call,BudgetExceeded
             reserve=self.config.get('reserve_tokens_per_call',12000)
             try:
                 callid=reserve_call(db,self.config)
@@ -430,10 +437,11 @@ class Service:
                 text=payload[role]
                 selected[role]=text if len(text)<=4000 else text[:500]+'\n[中段省略，完整原文在源事件]\n'+text[-3400:]
             selected['known_observation_keys']=[{'subject':o['subject'],'predicate':o['predicate']} for o in self.memory.observations(payload.get('cwd'))][:30]
+            if self.config.get('model_backend')=='otari':selected['_gateway_operation_id']='memory-'+jid
             result,usage=judge(self.config,self.home,selected,existing)
-            total=usage.get('input_tokens',0)+usage.get('output_tokens',0)
+            settle_call(db,callid,usage)
+            total=(usage.get('input_tokens') or 0)+(usage.get('output_tokens') or 0)
             with db:
-                db.execute('UPDATE calls SET tokens=? WHERE id=?',(total or reserve,callid))
                 db.execute("UPDATE jobs SET result=?,state='ready_to_save' WHERE id=?",(json.dumps({'judgment':result,'existing':existing},ensure_ascii=False),jid))
             notes=validate_notes(result,payload,existing)
             files=save_notes(self.config,jid,payload,notes)
@@ -443,6 +451,9 @@ class Service:
                     ('awaiting_index' if files else 'skipped',json.dumps(files),time.time()+10,jid))
             logging.info('Judged %s: notes=%s tokens=%s',jid[:12],len(files),total)
         except Exception as exc:
+            if callid is not None and getattr(exc,'kind',None):
+                from model_synthesis import settle_call
+                settle_call(db,callid,error=exc)
             attempt=job['attempts']+1
             state='awaiting_index' if job['state']=='awaiting_index' else ('retry' if attempt<3 else 'failed')
             current=db.execute('SELECT state FROM jobs WHERE id=?',(jid,)).fetchone()[0]
