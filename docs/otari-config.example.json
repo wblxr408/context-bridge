@@ -7,6 +7,10 @@
   "max_tokens_per_day": 200000,
   "reserve_tokens_per_call": 12000,
   "judge_timeout_seconds": 60,
+  "research": {
+    "official_domains": ["otari.ai", "raw.githubusercontent.com", "docs.python.org"],
+    "mcp_server_ids": []
+  },
   "otari": {
     "base_url": "https://otari.ai/api/v1",
     "api_key_env": "OTARI_API_KEY",

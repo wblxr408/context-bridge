@@ -12,10 +12,10 @@ This is ordinary task documentation; no new OpenSpec change is being created.
   request IDs, actual model/fallback, tokens and priced/unknown costs preserved.
 - [x] B. Existing listener and reflection use the selected backend and existing shared budgets.
   Exact source support remains mandatory; invalid results never become accepted memory.
-- [ ] C. Resumable research workflow: retrieve memory, discover current official sources
+- [x] C. Resumable research workflow: retrieve memory, discover current official sources
   through Otari web tools, materialize source text, synthesize cited answers, and
   retain intermediate evidence and failures for continuation without repeated effects.
-- [ ] D. Otari code analysis consumes actual run records, returns its execution results,
+- [x] D. Otari code analysis consumes actual run records, returns its execution results,
   and distinguishes generated analysis from the gateway's authoritative accounting.
 - [ ] E. Read-only HTTP MCP exposes only scoped search, source reads and revisions.
   Otari can use it through a reachable HTTPS endpoint; model-generating tools and
@@ -64,6 +64,13 @@ The theoretical rubric coverage is 30 + 60 + 10; it is not an awarded score.
 competition branch created. Implementation is local; the saved Cloud preference maps to
 `wblxr408/ContextRail`, a distinct repository. Existing ContextRail changes are untouched.
 
+Stage 1 was committed and pushed as `2177c03`. Stage 2 adds opt-in research tasks in
+the existing SQLite database and immutable Markdown source snapshots in the vault's
+`.otari-sources` directory (excluded from automatic memory recall). It does not install
+a service. Prepared request inputs, gateway settings and operation keys survive retries;
+known results are reused. An abandoned worker lease expires after 15 minutes.
+Next: read-only HTTP MCP and the local workbench, then delivery/hosted acceptance.
+
 ## Sources
 
 - https://otari.ai/devs-wilding
@@ -82,3 +89,12 @@ unreported tokens (`None + None`); settlement and persisted gateway history adde
 Both memory consumer cases passed. Eight new focused cases passed across the two
 current-change test modules; unchanged existing suites were not run.
 All endpoints in these tests are local contract fixtures, not hosted execution.
+
+Stage 2: eight new workflow cases initially failed (seven assertions and one missing
+source outcome). The implementation exposed a test-data keyword mismatch and strict
+canonical-path handling of not-yet-created snapshot folders; both were corrected.
+All eight current-change workflow cases pass: grounded official sources, interruption
+and exact-input resume, one reservation per logical call, missing quote rejection,
+budget pause/resume, immutable changed-source revisions, absent execution proof,
+insufficient evidence and domain rejection. The gateway and source loader are injected
+fixtures here; these results do not establish hosted tool availability or billing.
