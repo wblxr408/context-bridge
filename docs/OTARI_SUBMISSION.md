@@ -3,8 +3,9 @@
 Registration and prize eligibility were confirmed by the organizer on November 3,
 2026. The confirmed deadline is **November 11, 2026, 23:59 EST**
 (**November 12, 2026, 12:59 Asia/Shanghai**). The English demonstration and written
-feedback below are prepared for submission in the original signup email thread.
-Email delivery and acceptance of the supplied video are separate states.
+feedback were sent in the original signup email thread on November 3, 2026 at
+22:50 Asia/Shanghai. Gmail confirmed the sent message in that same thread.
+Organizer acknowledgment and acceptance of the supplied video remain pending.
 
 Official sources: [event and submission requirements](https://otari.ai/devs-wilding)
 and [judging rubric](https://docs.google.com/document/d/1-spnCZ3f2SSki8cb6FnochjchdyttUsjjxfoE6aBnF4/edit).
