@@ -7,4 +7,6 @@ tokenizers==0.23.2
 onnxruntime==1.30.0
 mcp==2.2.0
 jsonschema>=4.26,<5
+starlette==1.10.0
+uvicorn==0.54.0
 # watchdog 6.0.0 is bundled under app/vendor with its original license files.

@@ -11,6 +11,13 @@
     "official_domains": ["otari.ai", "raw.githubusercontent.com", "docs.python.org"],
     "mcp_server_ids": []
   },
+  "remote_mcp": {
+    "scope": "global",
+    "permalinks": ["main/demo/refund-policy"],
+    "token_env": "BRIDGE_MCP_TOKEN",
+    "allowed_hosts": ["127.0.0.1:*", "localhost:*"],
+    "allowed_origins": []
+  },
   "otari": {
     "base_url": "https://otari.ai/api/v1",
     "api_key_env": "OTARI_API_KEY",

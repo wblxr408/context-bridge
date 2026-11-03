@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bridge · 记忆研究台</title><link rel="stylesheet" href="/assets/app.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+<header class="masthead">
+  <a class="brand" href="/" aria-label="Bridge 工作台首页"><svg viewBox="0 0 36 32" aria-hidden="true"><path d="M4 27V15a14 14 0 0 1 28 0v12M10 27V16a8 8 0 0 1 16 0v11M2 27h32"/></svg><span>Bridge<span class="brand-dot">.</span></span></a>
+  <span class="descriptor">记忆研究台</span><span id="connection" class="connection">读取连接状态…</span>
+</header>
+<div class="workspace">
+  <aside class="history" aria-label="任务历史">
+    <button id="new-task" class="new-task">新建研究 <span aria-hidden="true">＋</span></button>
+    <div class="history-label">最近任务 <button id="refresh" class="text-button">刷新</button></div>
+    <nav id="task-list" aria-label="已保存的研究任务"><p class="muted">还没有研究任务。<br>从一个真实问题开始。</p></nav>
+    <p class="history-note">每个结论都有来处。<br>每次中断都能接续。</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <section class="compose" aria-labelledby="compose-title">
+      <div class="compose-heading"><h1 id="compose-title">把记忆变成<br><em>有据可查的回答。</em></h1><p>回到原始记录，核对当下资料。<br>让结论、来源与调用过程一起留下来。</p></div>
+      <form id="research-form">
+        <label for="question">这次想核对什么？</label>
+        <textarea id="question" name="query" required maxlength="4000" rows="3" placeholder="例如：退款任务重试时，怎样确保只产生一次业务效果？"></textarea>
+        <details class="conversation"><summary>添加对话原文 <span>可选 · 提取后保留出处</span></summary><label for="conversation">用户原话</label><textarea id="conversation" rows="3" maxlength="45000" placeholder="粘贴需要记住的明确约定或最新修正。"></textarea><label for="scope">记忆范围</label><input id="scope" placeholder="global" maxlength="1000"></details>
+        <fieldset class="options"><legend class="sr-only">研究方式</legend><label><input id="web" type="checkbox">核对官方网页</label><label><input id="analyze" type="checkbox">分析调用记录</label><label><input id="mcp" type="checkbox">读取远程记忆</label></fieldset>
+        <div class="form-bottom"><button id="example" type="button" class="text-button">填入示例</button><button id="submit" type="submit" class="primary">开始研究 <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M10 4l6 6-6 6"/></svg></button></div>
+      </form>
+      <p id="setup-note" class="setup-note" hidden></p>
+    </section>
+    <section id="result" class="result" aria-labelledby="result-title" hidden>
+      <div class="result-top"><span id="task-status" class="status"></span><button id="resume" class="primary compact" hidden>继续任务</button></div>
+      <h2 id="result-title"></h2><p id="task-time" class="muted"></p>
+      <div id="task-error" class="notice" role="alert" hidden></div>
+      <div id="answer" class="answer"></div><div id="citations" class="citations" aria-label="回答引用"></div>
+      <div id="source-warnings" class="warnings"></div>
+      <section id="analysis-section" hidden><h3>执行结果</h3><p id="analysis-status"></p><pre id="analysis-output"></pre></section>
+      <section class="ledger-section"><div class="section-heading"><h3>调用账本</h3><span id="cost-total" class="muted"></span></div><div class="table-scroll"><table><thead><tr><th>职责 / 请求</th><th>实际模型</th><th>Tokens</th><th>报告费用</th><th>回退</th></tr></thead><tbody id="ledger"></tbody></table></div><p class="ledger-note">费用取自网关报告；缺失值保留为未知。工具文字说明不作为执行凭据。</p></section>
+    </section>
+    <div id="message" class="notice" role="alert" hidden></div>
+  </main>
+  <aside class="inspector" aria-labelledby="inspector-title">
+    <div class="inspector-heading"><h2 id="inspector-title">证据与过程</h2><span id="evidence-count">0</span></div>
+    <div class="tabs" role="tablist" aria-label="证据查看方式"><button id="sources-tab" role="tab" aria-selected="true" aria-controls="sources-panel">原始来源</button><button id="events-tab" role="tab" aria-selected="false" aria-controls="events-panel" tabindex="-1">执行过程</button></div>
+    <div id="sources-panel" role="tabpanel" aria-labelledby="sources-tab"><div id="sources-empty" class="inspector-empty"><svg viewBox="0 0 70 70" aria-hidden="true"><path d="M18 10h25l12 12v38H18zM43 10v13h12M26 34h20M26 42h20M26 50h13"/></svg><p>先有证据，再有结论。</p><span>运行研究后，在这里逐条查看记忆原文、网页快照和引用片段。</span></div><div id="sources"></div></div>
+    <div id="events-panel" role="tabpanel" aria-labelledby="events-tab" hidden><ol id="timeline" class="timeline"></ol></div>
+    <details class="settings"><summary>本次连接配置</summary><dl id="settings-list"></dl></details>
+  </aside>
+</div>
+<footer>Context Bridge <span>·</span> Developers Wilding 参赛分支 <span>·</span> 本机工作台</footer>
+</body></html>

@@ -17,10 +17,10 @@ This is ordinary task documentation; no new OpenSpec change is being created.
   retain intermediate evidence and failures for continuation without repeated effects.
 - [x] D. Otari code analysis consumes actual run records, returns its execution results,
   and distinguishes generated analysis from the gateway's authoritative accounting.
-- [ ] E. Read-only HTTP MCP exposes only scoped search, source reads and revisions.
+- [x] E. Read-only HTTP MCP exposes only scoped search, source reads and revisions.
   Otari can use it through a reachable HTTPS endpoint; model-generating tools and
   memory writes are excluded from this remote tool loop.
-- [ ] F. Local workbench: task/answer, inspectable sources, timeline/model/tool/cost
+- [x] F. Local workbench: task/answer, inspectable sources, timeline/model/tool/cost
   evidence, loading/empty/error/budget states and resume; accessible responsive UI.
 - [ ] G. Focused behavior acceptance: latest correction, absent evidence, changed web
   sources, fallback, budget refusal, malformed output, interruption/resume and MCP bounds.
@@ -69,7 +69,12 @@ the existing SQLite database and immutable Markdown source snapshots in the vaul
 `.otari-sources` directory (excluded from automatic memory recall). It does not install
 a service. Prepared request inputs, gateway settings and operation keys survive retries;
 known results are reused. An abandoned worker lease expires after 15 minutes.
-Next: read-only HTTP MCP and the local workbench, then delivery/hosted acceptance.
+Stage 2 was committed and pushed as `3c937e3`. Stage 3 implements the local
+workbench and a separate authenticated MCP-only HTTP app, using the official MCP
+SDK 2.2 transport. Both bind loopback by default. Remote publication additionally
+requires an exact scope and explicit permalink allowlist; it cannot invoke models
+or write memory. External HTTPS reachability has not been deployed or verified.
+Next: current-change edge cases, setup/demo/submission material, hosted acceptance.
 
 ## Sources
 
@@ -98,3 +103,15 @@ and exact-input resume, one reservation per logical call, missing quote rejectio
 budget pause/resume, immutable changed-source revisions, absent execution proof,
 insufficient evidence and domain rejection. The gateway and source loader are injected
 fixtures here; these results do not establish hosted tool availability or billing.
+
+Stage 3: six new HTTP outcomes initially failed (five assertions and one absent task
+identity). All six pass after implementation, including actual MCP initialize/list/
+read/search/revision protocol calls and rejected unpublished sources/authentication.
+Browser acceptance exercised submit → answer → exact source quote, execution details,
+refresh → persisted task reopen, keyboard tab switching and 1440/390 layouts. The
+mobile document did not overflow its viewport; no captured browser warning/error.
+The browser backend used the stage-2 scripted tool fixture, not hosted Otari.
+Desktop screenshot: `%TEMP%/bridge-workbench-desktop.jpg`; mobile screenshot:
+`%TEMP%/bridge-workbench-mobile.jpg`. Fraunces font is bundled under its OFL license.
+On this Windows host fixed ports 8765 and 49723 returned bind error 10013; an
+OS-assigned port worked for the browser journey. Use a permitted port when launching.
